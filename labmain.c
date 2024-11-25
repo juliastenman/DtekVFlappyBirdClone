@@ -1,43 +1,79 @@
+/* Below functions can be found in other files. */
+extern void enable_interrupt(void);
+extern void display_string(string);
+
+
 volatile char *VGA = (volatile char*) 0x08000000;
 volatile int *VGA_CTRL = (volatile int*) 0x04000100;
 
+volatile int *button_ptr = (unsigned int*) 0x040000d0;
+
+// screen size
 const int WIDTH = 320;
 const int HEIGHT = 240;
 const int SIZE = WIDTH*HEIGHT;
 
+const int SKY_HEIGHT = 200;
+
+// colors
 const char BGR_COLOR = 50;
 const char GROUND_COLOR = 20;
 const char BIRD_COLOR = 0b11100000;
 
+// bird pos.
 const int BIRD_POS_X = WIDTH/5;
 const int BIRD_START_POS_Y = HEIGHT/2;
 const int BIRD_RADIUS = 15;
 
-const int FALL_SPEED = 1;
-const int SKY_HEIGHT = 200;
+// speeds
+const int FALL_SPEED = 1;	// pixels down per frame
+const int JUMP_SPEED = 5; 	// pixels up per frame
+const int JUMP_TIME = 5; 	// frames for each jump
+
+// is modified when jump
+volatile int jump_frames = 0;
+
 
 void handle_interrupt(int mcause) {
+	// button press
+	if (mcause == 18) {
+		jump_frames = JUMP_TIME;
 
-}
-
-void testVGA() {
-	// vertical scrolling
-	for(int i = 0; i< 320*480; i++) {
-		VGA[i] = i/320;
-	}
-
-	unsigned int y_ofs = 5;
-	while(1) {
-		*(VGA_CTRL+1) = (unsigned int) (VGA+y_ofs*320);
-		*(VGA_CTRL+0) = 0;
-		y_ofs = (y_ofs+1) % 240;
-		for (int i = 0; i < 1000000; i++) {
-			asm volatile ("nop");
-		}
-
+		// button_ptr + 3 is the edge capture register 
+		// (setting the bit for the button clears the edge capture)
+		*(button_ptr+3) |= 0b1; 
+		
+	} else if (mcause == 16) {
+		return;
 	}
 
 }
+
+void labinit(void) {
+	// button_ptr + 2 is the interrupt mask 
+	// setting bit 1 allows button to interrupt
+	*(button_ptr+2) = 0b1; 
+	enable_interrupt();
+}
+
+// void testVGA() {
+// 	// vertical scrolling
+// 	for(int i = 0; i< 320*480; i++) {
+// 		VGA[i] = i/320;
+// 	}
+
+// 	unsigned int y_ofs = 5;
+// 	while(1) {
+// 		*(VGA_CTRL+1) = (unsigned int) (VGA+y_ofs*320);
+// 		*(VGA_CTRL+0) = 0;
+// 		y_ofs = (y_ofs+1) % 240;
+// 		for (int i = 0; i < 1000000; i++) {
+// 			asm volatile ("nop");
+// 		}
+
+// 	}
+
+// }
 
 void drawBackground(int VGA_offset) {
 		// Sky
@@ -84,8 +120,16 @@ void game() {
 		// swap side of vga buffer		
 		VGA_offset = (VGA_offset+1)%2;
 
-		// bird is falling
-		bird_pos_y += FALL_SPEED;
+		// bird's movement
+		if (jump_frames > 0) {
+			display_string("jump frames is > 0");
+			bird_pos_y -= JUMP_SPEED;
+			jump_frames--;
+		} else {
+			// display_string("falling");
+			bird_pos_y += FALL_SPEED;
+		}
+
 
 		// positive y means downwards
 		if (bird_pos_y + BIRD_RADIUS >= SKY_HEIGHT){
@@ -96,5 +140,6 @@ void game() {
 
 // for VGA 
 int main(){
+	labinit();
 	game();
 }
