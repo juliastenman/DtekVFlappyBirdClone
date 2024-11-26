@@ -1,3 +1,6 @@
+#define PIPES_TO_GENERATE 500
+// check that code above works
+
 /* Below functions can be found in other files. */
 extern void enable_interrupt(void);
 extern void display_string(char*);
@@ -32,7 +35,7 @@ const int PIPE_HORIZONTAL_SPACE = 130;
 const int PIPE_HALF_GAP = 30;
 const int PIPE_MIN_HEIGHT = 50;
 const int MAX_PIPES = WIDTH / PIPE_HORIZONTAL_SPACE + 1;
-const int PIPES_TO_GENERATE = 500;
+// const int PIPES_TO_GENERATE = 500;
 
 // speeds
 const int PIPE_SPEED = 3;
@@ -43,11 +46,12 @@ const int JUMP_TIME = 2; 	// frames for each jump
 // is modified when jump
 int jump_frames = 0;
 
+// might have to change back PIPES_TO_GENERATE to constant 500
 // stores all pipes
-int pipes[500];
+int pipes[PIPES_TO_GENERATE];
 
 void setup_pipes() {
-	for (int i=0; i<500;i++) {
+	for (int i=0; i<PIPES_TO_GENERATE;i++) {
 		pipes[i] = (11111/i) % (SKY_HEIGHT - 2*PIPE_MIN_HEIGHT) + PIPE_MIN_HEIGHT;
 	}
 }
