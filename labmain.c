@@ -41,8 +41,9 @@ const int JUMP_SPEED = 6; 	// pixels up per frame
 const int JUMP_TIME = 2; 	// frames for each jump
 
 // is modified when jump
-volatile int jump_frames = 0;
+int jump_frames = 0;
 
+// stores all pipes
 int pipes[500];
 
 void setup_pipes() {
