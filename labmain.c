@@ -5,6 +5,7 @@
 extern void enable_interrupt(void);
 extern void display_string(char*);
 extern char* time2string(int time);
+extern void delay(int);
 
 volatile char *VGA = (volatile char*) 0x08000000;
 volatile int *VGA_CTRL = (volatile int*) 0x04000100;
@@ -23,10 +24,11 @@ const int SKY_HEIGHT = 200;
 const int PLAY_WIDTH = 70;
 
 // colors
-const char BGR_COLOR = 50;
-const char GROUND_COLOR = 20;
+const char BGR_COLOR = 0b00010011; 
+const char GROUND_COLOR = 0b00010100;
 const char BIRD_COLOR = 0b11100000;
-const char PIPE_COLOR = 0;//0b00011100;
+const char PIPE_COLOR = 0b00001000;
+const char BEAK_COLOR = 0b1111100;
 
 // bird pos.
 const int BIRD_POS_X = WIDTH/5;
@@ -45,8 +47,8 @@ const int PIPE_MIN_HEIGHT = 50;
 // const float FRAME_SPEED = 10;
 const int PIPE_SPEED = 3;
 const int FALL_SPEED = 3;	// pixels down per frame
-const int JUMP_SPEED = 15; 	// pixels up per frame
-const int JUMP_TIME = 1; 	// frames for each jump
+const int JUMP_SPEED = 7; 	// pixels up per frame
+const int JUMP_TIME = 4; 	// frames for each jump
 
 // is modified when jump
 int jump_frames = 0;
@@ -128,11 +130,18 @@ void toggle_high_score_display() {
 
 void handle_interrupt(int mcause) {
 	// button press
+	static int button_press = 0;
 	if (mcause == 18) {
-		if (*in_game) {
-			jump_frames = JUMP_TIME;
+		if (button_press == 0) {
+			// delay(50);
+			if (*in_game) {
+				jump_frames = JUMP_TIME;
+			} else {
+				*proceed = 1;
+			}
+			++button_press;
 		} else {
-			*proceed = 1;
+			button_press = 0;
 		}
 
 		// button_ptr + 3 is the edge capture register 
@@ -189,12 +198,28 @@ void drawBackground(int VGA_offset) {
 // Bird, uses (BIRD_POS_X, bird_pos_y) as center
 void drawBird(int bird_pos_y, int VGA_offset) {
 	// highest position and lowest allowed y value on screen is 0 
+	int x0 =  BIRD_POS_X-BIRD_RADIUS;
+	int x1 = BIRD_POS_X+BIRD_RADIUS;
+
 	int y0=bird_pos_y-BIRD_RADIUS > 0 ? bird_pos_y-BIRD_RADIUS : 0;
 	for (int y=y0; y<bird_pos_y+BIRD_RADIUS;y++) {
-		for (int x=BIRD_POS_X-BIRD_RADIUS; x<BIRD_POS_X+BIRD_RADIUS;x++) {
+		for (int x=x0; x<x1;x++) {
 			*(VGA + VGA_offset*SIZE + y*WIDTH + x) = BIRD_COLOR;
 		}
 	}
+	for (int y=y0+3;y<y0+10;y++) {
+		for (int x=x1-5; x<x1-1;x++) {
+			if (x >= x1-4 && y >= y0 + 5 && !(x==x1-3 && y==y0+6)) {
+				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0;
+			} else {
+				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0xFF;
+			}
+		}
+	}
+	// *(VGA + VGA_offset*SIZE + (y0+9)*WIDTH + (x1-1)) = 0b11111100;
+	*(VGA + VGA_offset*SIZE + (y0+11)*WIDTH + (x1-1)) = BEAK_COLOR;
+	*(VGA + VGA_offset*SIZE + (y0+10)*WIDTH + (x1-1)) = BEAK_COLOR;
+	*(VGA + VGA_offset*SIZE + (y0+10)*WIDTH + (x1)) = BEAK_COLOR;
 }
 
 
@@ -246,10 +271,10 @@ void game_over(int VGA_offset) {
 		//
 	}
 	*proceed = 0;
-	while (!(*proceed)) {
-		//
-	}
-	*proceed = 0;
+	// while (!(*proceed)) {
+	// 	//
+	// }
+	// *proceed = 0;
 }
 
 
@@ -263,6 +288,7 @@ void game() {
 	int score = 0;
 	setup_pipes();
 	setup_bg_ground();
+	setup_7seg_displays();
 	set_displays(0,0,0);
 	while (1) {
 		drawBackground(VGA_offset);
@@ -307,6 +333,8 @@ void game() {
 			// display_string("jump frames is > 0\n");
 			bird_pos_y -= JUMP_SPEED;
 			jump_frames--;
+		} else if (jump_frames == 0) {
+			jump_frames--;
 		} else {
 			// display_string("falling");
 			bird_pos_y += FALL_SPEED;
@@ -346,8 +374,7 @@ void main_menu() {
 			//
 		}
 		*proceed = 0;
-		*in_main_menu = 0;
-		*toggle_high_score = 0;		
+		*in_main_menu = 0;	
 		game();
 	}
 }
