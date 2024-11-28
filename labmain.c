@@ -13,6 +13,9 @@ volatile int *VGA_CTRL = (volatile int*) 0x04000100;
 volatile int *button_ptr = (volatile int*) 0x040000d0;
 volatile unsigned char *display_ptr = (unsigned char*) 0x04000050;      // 1 byte per display
 volatile unsigned int *switch_ptr = (unsigned int*) 0x04000010;     // 10 bits (2 bytes sufficient)
+volatile unsigned short *timer_ptr = (unsigned short*) 0x04000020;      // 2 bytes per register
+
+int timeoutcount = 0;
 
 // screen size
 const int WIDTH = 320;
@@ -56,6 +59,7 @@ int jump_frames = 0;
 int HIGH_SCORE_START = 0;
 volatile int* high_score = &HIGH_SCORE_START;
 
+int pipe_sp = PIPE_SPEED;
 // might have to change back PIPES_TO_GENERATE to constant 500
 // stores all pipes
 int pipes[PIPES_TO_GENERATE];
@@ -155,7 +159,13 @@ void handle_interrupt(int mcause) {
 		}
 		*(switch_ptr+3) |= 0b1;
 	}else if (mcause == 16) {
-		return;
+		*timer_ptr &= ~(0b1);   // reset timeout bit
+		++timeoutcount;
+		if (timeoutcount==600) {
+			++pipe_sp;
+			timeoutcount=0;
+		}
+
 	}
 }
 
@@ -164,6 +174,9 @@ void labinit(void) {
 	// setting bit 1 allows button to interrupt
 	*(button_ptr+2) = 0b1; 
 	*(switch_ptr+2) = 0b1;
+	*(timer_ptr+2*2) = 0xC6BF; // PERIODL
+	*(timer_ptr+3*2) = 0x002D; // PERIODH (3 mil - 1 together)
+	*(timer_ptr+1*2) |= 0b111; // CONTROL: start timer, let it continue and allow interrupts
 	enable_interrupt();
 }
 
@@ -262,10 +275,12 @@ void drawPipes(int* pipe_idx, int* first_pipe_center_x, int VGA_offset) {
 		++idx;
 		x_center += PIPE_HORIZONTAL_SPACE;
 	}
-	*first_pipe_center_x -= PIPE_SPEED;
+	*first_pipe_center_x -= pipe_sp;
 }
 
 void game_over(int VGA_offset) {
+	pipe_sp = PIPE_SPEED;
+	timeoutcount=0;
 	for (int i=0; i<SIZE;i++) {
 		*(VGA+VGA_offset*SIZE+i) = BIRD_COLOR;
 	}
