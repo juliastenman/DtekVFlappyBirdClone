@@ -60,9 +60,6 @@ volatile int* high_score = &HIGH_SCORE_START;
 // stores all pipes
 int pipes[PIPES_TO_GENERATE];
 
-int toggle_high_score_val = 0;
-volatile int* toggle_high_score = &toggle_high_score_val;
-
 // true if in game
 int in_main_menu_val = 0;
 volatile int* in_main_menu = &in_main_menu_val;
@@ -121,11 +118,13 @@ void set_score(int score) {
 }
 
 void toggle_high_score_display() {
-	if (*toggle_high_score) {
+	static int toggle_high_score = 0;
+	if (toggle_high_score) {
 		set_score(*high_score);
 	} else {
 		setup_7seg_displays();
 	}
+	toggle_high_score = (toggle_high_score+1)%2;
 }
 
 void handle_interrupt(int mcause) {
@@ -150,10 +149,11 @@ void handle_interrupt(int mcause) {
 		
 	} else if (mcause == 17) {
 		if (*(in_main_menu)) {
-			*toggle_high_score = (*toggle_high_score + 1) % 2;
+			delay(50);
+			// *toggle_high_score = (*toggle_high_score + 1) % 2;
 			toggle_high_score_display();
-			*(switch_ptr+3) |= 0b1;
 		}
+		*(switch_ptr+3) |= 0b1;
 	}else if (mcause == 16) {
 		return;
 	}
@@ -202,24 +202,31 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 	int x1 = BIRD_POS_X+BIRD_RADIUS;
 
 	int y0=bird_pos_y-BIRD_RADIUS > 0 ? bird_pos_y-BIRD_RADIUS : 0;
-	for (int y=y0; y<bird_pos_y+BIRD_RADIUS;y++) {
+	int y1=bird_pos_y+BIRD_RADIUS;
+
+	// draw body
+	for (int y=y0; y<y1;y++) {
 		for (int x=x0; x<x1;x++) {
 			*(VGA + VGA_offset*SIZE + y*WIDTH + x) = BIRD_COLOR;
 		}
 	}
-	for (int y=y0+3;y<y0+10;y++) {
+	// draw eye
+	int y01 = y1-11 > 0 ? y1-11 : 0;
+	for (int y=y01;y<y1-4;y++) {
 		for (int x=x1-5; x<x1-1;x++) {
-			if (x >= x1-4 && y >= y0 + 5 && !(x==x1-3 && y==y0+6)) {
+			if (x >= x1-4 && y >= y1-9 && !(x==x1-3 && y==y1-8)) {
 				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0;
 			} else {
 				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0xFF;
 			}
 		}
 	}
-	// *(VGA + VGA_offset*SIZE + (y0+9)*WIDTH + (x1-1)) = 0b11111100;
-	*(VGA + VGA_offset*SIZE + (y0+11)*WIDTH + (x1-1)) = BEAK_COLOR;
-	*(VGA + VGA_offset*SIZE + (y0+10)*WIDTH + (x1-1)) = BEAK_COLOR;
-	*(VGA + VGA_offset*SIZE + (y0+10)*WIDTH + (x1)) = BEAK_COLOR;
+	// draw beak
+	int y02 = y1 > 3 ? y1-3 : 0;
+	int y03 = y1 > 4 ? y1-4 : 0; 
+	*(VGA + VGA_offset*SIZE + (y02)*WIDTH + (x1-1)) = BEAK_COLOR;
+	*(VGA + VGA_offset*SIZE + (y03)*WIDTH + (x1-1)) = BEAK_COLOR;
+	*(VGA + VGA_offset*SIZE + (y03)*WIDTH + (x1)) = BEAK_COLOR;
 }
 
 
