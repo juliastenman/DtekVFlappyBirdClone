@@ -31,6 +31,8 @@ const char BGR_COLOR = 0b00010011;
 const char GROUND_COLOR = 0b00010100;
 const char BIRD_COLOR = 0b11100000;
 const char PIPE_COLOR = 0b00001000;
+const char PIPE_LIGHT_COLOR = 0b00101100;
+const char PIPE_HIGHLIGHT = 0b00110101;
 const char BEAK_COLOR = 0b1111100;
 
 // bird pos.
@@ -261,14 +263,31 @@ void drawPipes(int* pipe_idx, int* first_pipe_center_x, int VGA_offset) {
 		// high part of pipe
 		for (int y=0; y<y_center-PIPE_HALF_GAP; y++) {
 			for (int x=x0; x<x1; x++) {
-				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR;
+				if (x > x0 + 5 && x < x1-4) {
+					if (x >= x1-10 && x < x1-7) {
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0b00110101;
+					} else {
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR + 0b00100100;
+					}
+				} else {
+					*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR;
+
+				}
 			}
 		}
 
 		// low part of pipe
 		for (int y=y_center+PIPE_HALF_GAP; y<SKY_HEIGHT; y++) {
 			for (int x=x0; x<x1; x++) {
-				*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR;
+				if (x > x0 + 5 && x < x1-4) {
+					if (x >= x1-10 && x < x1-7) {
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_HIGHLIGHT;
+					} else {
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_LIGHT_COLOR;
+					}
+				} else {
+					*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR;
+				}
 			}
 		}
 
