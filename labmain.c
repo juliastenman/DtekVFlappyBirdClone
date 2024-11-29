@@ -62,7 +62,7 @@ int HIGH_SCORE_START = 0;
 volatile int* high_score = &HIGH_SCORE_START;
 
 int pipe_sp = PIPE_SPEED;
-// might have to change back PIPES_TO_GENERATE to constant 500
+
 // stores all pipes
 int pipes[PIPES_TO_GENERATE];
 
@@ -245,14 +245,11 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 }
 
 
-void drawPipes(int* pipe_idx, int* first_pipe_center_x, int VGA_offset) {
+void drawPipes(int pipe_idx, int first_pipe_center_x, int VGA_offset) {
 	// update first pipe if out of frame
-	if (*first_pipe_center_x + PIPE_RADIUS < 0) {
-		*pipe_idx = ((*pipe_idx) + 1)%1000;
-		*first_pipe_center_x += PIPE_HORIZONTAL_SPACE;
-	}
-	int idx = *pipe_idx;
-	int x_center = *first_pipe_center_x;
+	// char* address = (char*) VGA + VGA_offset*SIZE;
+	int idx = pipe_idx;
+	int x_center = first_pipe_center_x;
 	
 	while (x_center - PIPE_RADIUS < WIDTH) {
 		int x0 = x_center-PIPE_RADIUS > 0 ? x_center-PIPE_RADIUS : 0;
@@ -265,9 +262,9 @@ void drawPipes(int* pipe_idx, int* first_pipe_center_x, int VGA_offset) {
 			for (int x=x0; x<x1; x++) {
 				if (x > x0 + 5 && x < x1-4) {
 					if (x >= x1-10 && x < x1-7) {
-						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = 0b00110101;
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_HIGHLIGHT;
 					} else {
-						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR + 0b00100100;
+						*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_LIGHT_COLOR;
 					}
 				} else {
 					*(VGA + VGA_offset*SIZE + y*WIDTH + x) = PIPE_COLOR;
@@ -294,7 +291,6 @@ void drawPipes(int* pipe_idx, int* first_pipe_center_x, int VGA_offset) {
 		++idx;
 		x_center += PIPE_HORIZONTAL_SPACE;
 	}
-	*first_pipe_center_x -= pipe_sp;
 }
 
 void game_over(int VGA_offset) {
@@ -334,7 +330,7 @@ void game() {
 	while (1) {
 		drawBackground(VGA_offset);
 		drawBird(bird_pos_y, VGA_offset);
-		drawPipes(&pipe_idx, &first_pipe_center_x, VGA_offset);	
+		drawPipes(pipe_idx, first_pipe_center_x, VGA_offset);	
 
 
 		// sends vga address as output
@@ -348,6 +344,15 @@ void game() {
 			asm volatile("nop");
 		}
 
+		// if leftmost visible pipe out of screen, make next pipe the first pipe
+		if (first_pipe_center_x + PIPE_RADIUS < 0) {
+			pipe_idx = (pipe_idx + 1)%1000;
+			first_pipe_center_x += PIPE_HORIZONTAL_SPACE;
+		}
+
+		// move first pipe by speed
+		first_pipe_center_x -= pipe_sp;
+		
 		// swap side of vga buffer		
 		VGA_offset = (VGA_offset+1)%2;
 
