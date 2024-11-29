@@ -45,11 +45,8 @@ const int PIPE_RADIUS=15;
 const int PIPE_HORIZONTAL_SPACE = 130;
 const int PIPE_HALF_GAP = 30;
 const int PIPE_MIN_HEIGHT = 50;
-// const int MAX_PIPES = WIDTH / PIPE_HORIZONTAL_SPACE + 1;
-// const int PIPES_TO_GENERATE = 500;
 
 // speeds
-// const float FRAME_SPEED = 10;
 const int PIPE_SPEED = 3;
 const int FALL_SPEED = 3;	// pixels down per frame
 const int JUMP_SPEED = 7; 	// pixels up per frame
@@ -156,7 +153,6 @@ void handle_interrupt(int mcause) {
 	} else if (mcause == 17) {
 		if (*(in_main_menu)) {
 			delay(50);
-			// *toggle_high_score = (*toggle_high_score + 1) % 2;
 			toggle_high_score_display();
 		}
 		*(switch_ptr+3) |= 0b1;
@@ -181,27 +177,6 @@ void labinit(void) {
 	*(timer_ptr+1*2) |= 0b111; // CONTROL: start timer, let it continue and allow interrupts
 	enable_interrupt();
 }
-
-/*
-// void testVGA() {
-// 	// vertical scrolling
-// 	for(int i = 0; i< 320*480; i++) {
-// 		VGA[i] = i/320;
-// 	}
-
-// 	unsigned int y_ofs = 5;
-// 	while(1) {
-// 		*(VGA_CTRL+1) = (unsigned int) (VGA+y_ofs*320);
-// 		*(VGA_CTRL+0) = 0;
-// 		y_ofs = (y_ofs+1) % 240;
-// 		for (int i = 0; i < 1000000; i++) {
-// 			asm volatile ("nop");
-// 		}
-
-// 	}
-
-// }
-*/
 
 void drawBackground(int VGA_offset) {
 	// Sky
@@ -246,8 +221,6 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 
 
 void drawPipes(int pipe_idx, int first_pipe_center_x, int VGA_offset) {
-	// update first pipe if out of frame
-	// char* address = (char*) VGA + VGA_offset*SIZE;
 	int idx = pipe_idx;
 	int x_center = first_pipe_center_x;
 	
@@ -304,14 +277,9 @@ void game_over(int VGA_offset) {
 	*(VGA_CTRL+1) = (unsigned int) VGA+VGA_offset*SIZE;
 	*(VGA_CTRL+0) = 0;
 	
-	while (!(*proceed)) {
-		//
-	}
+	// wait until proceed
+	while (!(*proceed)) {}
 	*proceed = 0;
-	// while (!(*proceed)) {
-	// 	//
-	// }
-	// *proceed = 0;
 }
 
 
