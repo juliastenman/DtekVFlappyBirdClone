@@ -205,11 +205,17 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 	}
 
 	// draw wings
-	for (int x=0; x<6; x++) {
+	for (int x=0; x<5; x++) {
 		for (int y=0; y<5; y++) {
 			if (bird_pos_y+y>=0) {
-				if (1.5*y == -x+6 || 1.5*y -1 == -x+6) {
-					*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = 0b10000000;
+				if (jump_frames > 0) {
+					if (1.5*y == -x+6 || 1.5*y -1 == -x+6) {
+						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = 0b10000000;
+				 	}
+				} else {
+					if (3*y-3 == x || 3*y-2==x) {
+						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = 0b10000000;
+				 	}
 				}
 
 			}
