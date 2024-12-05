@@ -82,7 +82,7 @@ volatile int* proceed = &proceed_val;
 
 void setup_pipes(int (*pipes)[1000]) {
 	for (int i=0; i<PIPES_TO_GENERATE;i++) {
-		(*pipes)[i] = ((11111+7*i)/(i%23)) % (SKY_HEIGHT - 2*PIPE_MIN_HEIGHT) + PIPE_MIN_HEIGHT;
+		(*pipes)[i] = ((11111+7*(i+timeoutcount))/((i+1)%23)) % (SKY_HEIGHT - 2*PIPE_MIN_HEIGHT) + PIPE_MIN_HEIGHT;
 	}
 }
 
@@ -316,6 +316,7 @@ void game() {
 	// stores all pipes
 	int pipes[PIPES_TO_GENERATE];
 	setup_pipes(&pipes);
+
 	setup_bg_ground();
 	setup_7seg_displays();
 	set_displays(0,0,0);
@@ -381,7 +382,6 @@ void game() {
 		} else if (jump_frames == 0) {
 			jump_frames--;
 		} else {
-			// display_string("falling");
 			bird_pos_y += FALL_SPEED;
 		}
 	}
@@ -393,7 +393,6 @@ void game() {
 
 void main_menu() {
 	while (1) {
-		// *in_main_menu = 1;
 		status = MAIN_MENU;
 		setup_7seg_displays();
 		for (int i=0; i<SIZE;i++) {
