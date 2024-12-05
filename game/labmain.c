@@ -14,15 +14,14 @@ volatile unsigned char *display_ptr = (unsigned char*) 0x04000050;      // 1 byt
 volatile unsigned int *switch_ptr = (unsigned int*) 0x04000010;     // 10 bits (2 bytes sufficient)
 volatile unsigned short *timer_ptr = (unsigned short*) 0x04000020;      // 2 bytes per register
 
-int timeoutcount = 0;
 
 // screen size
 const int WIDTH = 320;
 const int HEIGHT = 240;
 const int SIZE = WIDTH*HEIGHT;
-
 const int SKY_HEIGHT = 200;
 
+// main menu symbol
 const int PLAY_WIDTH = 70;
 
 // colors
@@ -50,6 +49,9 @@ const int PIPE_SPEED = 3;
 const int FALL_SPEED = 3;	// pixels down per frame
 const int JUMP_SPEED = 7; 	// pixels up per frame
 const int JUMP_TIME = 4; 	// frames for each jump
+
+
+int timeoutcount = 0;
 
 // is modified when jump
 int jump_frames = 0;
@@ -149,13 +151,15 @@ void handle_interrupt(int mcause) {
 		// (setting the bit for the button clears the edge capture)
 		*(button_ptr+3) |= 0b1; 
 		
-	} else if (mcause == 17) {
+	} 
+	if (mcause == 17) {
 		if (*(in_main_menu)) {
 			delay(50);
 			toggle_high_score_display();
 		}
 		*(switch_ptr+3) |= 0b1;
-	}else if (mcause == 16) {
+	}
+	if (mcause == 16) {
 		*timer_ptr &= ~(0b1);   // reset timeout bit
 		++timeoutcount;
 		if (timeoutcount==600) {
@@ -199,13 +203,6 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 			*(VGA + VGA_offset*SIZE + y*WIDTH + x) = BIRD_COLOR;
 		}
 	}
-	// for (int x=0; x<6; x++) {
-	// 	for (int y=0; y<5; y++) {
-	// 		if (2*y <= x) {
-	// 			*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (x0+1+x)) = 0b10000000;
-	// 		}
-	// 	}
-	// }
 
 	// draw wings
 	for (int x=0; x<6; x++) {
@@ -319,6 +316,11 @@ void game() {
 	setup_7seg_displays();
 	set_displays(0,0,0);
 	while (1) {
+		// stall while swapping
+		while (*(VGA_CTRL+3)&0b1) {
+			asm volatile("nop");
+		}
+
 		drawBackground(VGA_offset);
 		drawBird(bird_pos_y, VGA_offset);
 		drawPipes(pipe_idx, first_pipe_center_x, VGA_offset);	
@@ -327,13 +329,18 @@ void game() {
 		// sends vga address as output
 		*(VGA_CTRL+1) = (unsigned int) VGA+VGA_offset*SIZE;
 		
-		// find out what this does
+		// swaps buffer and backbuffer
 		*(VGA_CTRL+0) = 0;
 
-		// Small delay
-		for (int i = 0; i < 100000; i++) {
-			asm volatile("nop");
-		}
+		
+		// // Small delay
+		// for (int i = 0; i < 100000; i++) {
+		// 	asm volatile("nop");
+		// }
+		delay(5);
+		
+		// swap side of vga buffer		
+		VGA_offset = (VGA_offset+1)%2;
 
 		// if leftmost visible pipe out of screen, make next pipe the first pipe
 		if (first_pipe_center_x + PIPE_RADIUS < 0) {
@@ -343,11 +350,8 @@ void game() {
 
 		// move first pipe by speed
 		first_pipe_center_x -= pipe_sp;
-		
-		// swap side of vga buffer		
-		VGA_offset = (VGA_offset+1)%2;
 
-		if (first_pipe_center_x >= BIRD_POS_X - BIRD_RADIUS && first_pipe_center_x < BIRD_POS_X - BIRD_RADIUS + PIPE_SPEED) {
+		if (first_pipe_center_x >= BIRD_POS_X - BIRD_RADIUS && first_pipe_center_x < BIRD_POS_X - BIRD_RADIUS + pipe_sp) {
 			++score;
 		}
 
