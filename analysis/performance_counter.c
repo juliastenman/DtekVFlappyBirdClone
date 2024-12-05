@@ -11,7 +11,7 @@ int main(){
     // Read the mcycle value into foo_time
     asm("csrr %0, mcycle" : "=r"(game_time) );
     // Print out the value of foo_time (requires print_dec in time4riscv.zip)
-    print("\nTime for foo() was: ");
+    print("\nTime for game() was: ");
     print_dec(game_time);
     print("\n");
 }
