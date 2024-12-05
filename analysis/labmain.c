@@ -381,7 +381,8 @@ void game() {
 	if (score > *high_score) {
 		*high_score = score;
 	}
-	game_over(VGA_offset);
+	return;
+	// game_over(VGA_offset);
 }
 
 void main_menu() {
@@ -417,7 +418,7 @@ void main_menu() {
 }
 
 // for VGA 
-int main(){
-	labinit();
-	main_menu();
-}
+// int main(){
+// 	labinit();
+// 	main_menu();
+// }
