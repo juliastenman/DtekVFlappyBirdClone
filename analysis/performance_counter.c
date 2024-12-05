@@ -3,7 +3,7 @@ void print_dec(unsigned int);
 void game(void);
 
 int main(){
-    int game_time; // Create a variable called foo_time
+    int game_time; // Create a variable called game_time
     // Clear the mcycle CSR by writing 0 to it
     asm volatile ("csrw mcycle, x0");
     asm volatile ("csrw minstret, x0");
@@ -26,7 +26,7 @@ int main(){
     asm("csrr %0, mhpmcounter7" : "=r"(game_time) );
     asm("csrr %0, mhpmcounter8" : "=r"(game_time) );
     asm("csrr %0, mhpmcounter9" : "=r"(game_time) );
-    
+
     // Print out the value of foo_time (requires print_dec in time4riscv.zip)
     print("\nTime for game() was: ");
     print_dec(game_time);
