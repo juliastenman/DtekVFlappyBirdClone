@@ -1,6 +1,6 @@
 void print(char*);
 void print_dec(unsigned int);
-void game(void);
+void game(int);
 
 int main(){
     int x; // Create a variable called x
@@ -15,11 +15,11 @@ int main(){
     asm volatile ("csrw mhpmcounter8, x0");
     asm volatile ("csrw mhpmcounter9, x0");
     // Call the game function
-    game();
+    game(0);
     // Read the mcycle value into x
     asm("csrr %0, mcycle" : "=r"(x) );
     // Print out the value of foo_time (requires print_dec in time4riscv.zip)
-    print("\nTime for game() was: ");
+    print("\nNumber of cycles for game() was: ");
     print_dec(x);
     print("\n");
     asm("csrr %0, minstret" : "=r"(x) );
