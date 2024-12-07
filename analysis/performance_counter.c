@@ -1,9 +1,11 @@
 void print(char*);
 void print_dec(unsigned int);
 void game(int);
+void labinit(void);
 
-int main(){
-    int x; // Create a variable called x
+int x; // Create a variable called x
+
+void clear_registers() {
     // Clear the mcycle CSR by writing 0 to it
     asm volatile ("csrw mcycle, x0");
     asm volatile ("csrw minstret, x0");
@@ -14,44 +16,64 @@ int main(){
     asm volatile ("csrw mhpmcounter7, x0");
     asm volatile ("csrw mhpmcounter8, x0");
     asm volatile ("csrw mhpmcounter9, x0");
-    // Call the game function
-    game(0);
+}
+
+void display_registers() {
     // Read the mcycle value into x
     asm("csrr %0, mcycle" : "=r"(x) );
     // Print out the value of foo_time (requires print_dec in time4riscv.zip)
     print("\nNumber of cycles for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, minstret" : "=r"(x) );
     print("\nNumber of retired instructions for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter3" : "=r"(x) );
     print("\nNumber of retired memory instructions for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter4" : "=r"(x) );
     print("\nI-cache miss from instruction-fetch for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter5" : "=r"(x) );
     print("\nD-cache miss from memory operation for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter6" : "=r"(x) );
     print("\nNumber of stall from I-cache misses in CPU for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter7" : "=r"(x) );
     print("\nNumber of stall from D-cache misses in CPU for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter8" : "=r"(x) );
     print("\nStalls due to data hazards that cannot be solved by forwarding in the CPU for game() was: ");
     print_dec(x);
     print("\n");
+    
     asm("csrr %0, mhpmcounter9" : "=r"(x) );
     print("\nNumber of stalls due to expensive ALU operations in CPU for game() was: ");
     print_dec(x);
     print("\n");
+
+}
+
+int main(){
+    labinit();
+    clear_registers();
+
+    // Call the game function
+    game(0);
+    
+    display_registers();
 }
