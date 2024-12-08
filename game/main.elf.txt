@@ -406,7 +406,7 @@ Disassembly of section .text:
      5c0:	000026b7          	lui	a3,0x2
      5c4:	01400593          	li	a1,20
      5c8:	c0060613          	addi	a2,a2,-1024 # 12c00 <__global_pointer+0x10713>
-     5cc:	d106a703          	lw	a4,-752(a3) # 1d10 <VGA>
+     5cc:	d146a703          	lw	a4,-748(a3) # 1d14 <VGA>
      5d0:	00f70733          	add	a4,a4,a5
      5d4:	00b70023          	sb	a1,0(a4)
      5d8:	00178793          	addi	a5,a5,1
@@ -416,7 +416,7 @@ Disassembly of section .text:
      5e8:	60078793          	addi	a5,a5,1536 # 22600 <__global_pointer+0x20113>
      5ec:	01400593          	li	a1,20
      5f0:	80060613          	addi	a2,a2,-2048 # 25800 <__global_pointer+0x23313>
-     5f4:	d106a703          	lw	a4,-752(a3)
+     5f4:	d146a703          	lw	a4,-748(a3)
      5f8:	00f70733          	add	a4,a4,a5
      5fc:	00b70023          	sb	a1,0(a4)
      600:	00178793          	addi	a5,a5,1
@@ -432,7 +432,7 @@ Disassembly of section .text:
      620:	0087d683          	lhu	a3,8(a5)
      624:	000027b7          	lui	a5,0x2
      628:	ff010113          	addi	sp,sp,-16
-     62c:	d047a783          	lw	a5,-764(a5) # 1d04 <display_ptr>
+     62c:	d087a783          	lw	a5,-760(a5) # 1d08 <display_ptr>
      630:	00e10723          	sb	a4,14(sp)
      634:	01058713          	addi	a4,a1,16
      638:	01112223          	sw	a7,4(sp)
@@ -450,10 +450,10 @@ Disassembly of section .text:
 
 00000668 <setup_7seg_displays>:
      668:	00002737          	lui	a4,0x2
-     66c:	d0472683          	lw	a3,-764(a4) # 1d04 <display_ptr>
+     66c:	d0872683          	lw	a3,-760(a4) # 1d08 <display_ptr>
      670:	fff00793          	li	a5,-1
      674:	00f68023          	sb	a5,0(a3)
-     678:	d0472703          	lw	a4,-764(a4)
+     678:	d0872703          	lw	a4,-760(a4)
      67c:	00f70823          	sb	a5,16(a4)
      680:	02f70023          	sb	a5,32(a4)
      684:	02f70823          	sb	a5,48(a4)
@@ -476,7 +476,7 @@ Disassembly of section .text:
      6c0:	00002837          	lui	a6,0x2
      6c4:	00a00613          	li	a2,10
      6c8:	01078793          	addi	a5,a5,16
-     6cc:	d0482703          	lw	a4,-764(a6) # 1d04 <display_ptr>
+     6cc:	d0882703          	lw	a4,-760(a6) # 1d08 <display_ptr>
      6d0:	002787b3          	add	a5,a5,sp
      6d4:	01d12223          	sw	t4,4(sp)
      6d8:	01c12423          	sw	t3,8(sp)
@@ -495,10 +495,10 @@ Disassembly of section .text:
 
 0000070c <toggle_high_score_display>:
      70c:	00002fb7          	lui	t6,0x2
-     710:	d18fa583          	lw	a1,-744(t6) # 1d18 <toggle_high_score.1>
+     710:	cf0fa583          	lw	a1,-784(t6) # 1cf0 <toggle_high_score.1>
      714:	08058e63          	beqz	a1,7b0 <toggle_high_score_display+0xa4>
      718:	000027b7          	lui	a5,0x2
-     71c:	cf87a783          	lw	a5,-776(a5) # 1cf8 <high_score>
+     71c:	cfc7a783          	lw	a5,-772(a5) # 1cfc <high_score>
      720:	00a00713          	li	a4,10
      724:	0007a783          	lw	a5,0(a5)
      728:	02e7e733          	rem	a4,a5,a4
@@ -514,7 +514,7 @@ Disassembly of section .text:
      750:	000028b7          	lui	a7,0x2
      754:	00a00513          	li	a0,10
      758:	01070713          	addi	a4,a4,16
-     75c:	d048a683          	lw	a3,-764(a7) # 1d04 <display_ptr>
+     75c:	d088a683          	lw	a3,-760(a7) # 1d08 <display_ptr>
      760:	00270733          	add	a4,a4,sp
      764:	01e12223          	sw	t5,4(sp)
      768:	01d12423          	sw	t4,8(sp)
@@ -532,14 +532,14 @@ Disassembly of section .text:
      798:	00e787b3          	add	a5,a5,a4
      79c:	0017f793          	andi	a5,a5,1
      7a0:	40e787b3          	sub	a5,a5,a4
-     7a4:	d0ffac23          	sw	a5,-744(t6)
+     7a4:	ceffa823          	sw	a5,-784(t6)
      7a8:	01010113          	addi	sp,sp,16
      7ac:	00008067          	ret
      7b0:	00002737          	lui	a4,0x2
-     7b4:	d0472683          	lw	a3,-764(a4) # 1d04 <display_ptr>
+     7b4:	d0872683          	lw	a3,-760(a4) # 1d08 <display_ptr>
      7b8:	fff00793          	li	a5,-1
      7bc:	00f68023          	sb	a5,0(a3)
-     7c0:	d0472703          	lw	a4,-764(a4)
+     7c0:	d0872703          	lw	a4,-760(a4)
      7c4:	00f70823          	sb	a5,16(a4)
      7c8:	02f70023          	sb	a5,32(a4)
      7cc:	02f70823          	sb	a5,48(a4)
@@ -550,7 +550,7 @@ Disassembly of section .text:
      7e0:	00e787b3          	add	a5,a5,a4
      7e4:	0017f793          	andi	a5,a5,1
      7e8:	40e787b3          	sub	a5,a5,a4
-     7ec:	d0ffac23          	sw	a5,-744(t6)
+     7ec:	ceffa823          	sw	a5,-784(t6)
      7f0:	00008067          	ret
 
 000007f4 <handle_interrupt>:
@@ -565,7 +565,7 @@ Disassembly of section .text:
      814:	00112e23          	sw	ra,28(sp)
      818:	0c040e63          	beqz	s0,8f4 <__heap_size+0xf4>
      81c:	000027b7          	lui	a5,0x2
-     820:	d007a703          	lw	a4,-768(a5) # 1d00 <switch_ptr>
+     820:	d047a703          	lw	a4,-764(a5) # 1d04 <switch_ptr>
      824:	01c12083          	lw	ra,28(sp)
      828:	01812403          	lw	s0,24(sp)
      82c:	00c72783          	lw	a5,12(a4)
@@ -576,7 +576,7 @@ Disassembly of section .text:
      840:	01000793          	li	a5,16
      844:	04f51063          	bne	a0,a5,884 <__heap_size+0x84>
      848:	000027b7          	lui	a5,0x2
-     84c:	cfc7a583          	lw	a1,-772(a5) # 1cfc <timer_ptr>
+     84c:	d007a583          	lw	a1,-768(a5) # 1d00 <timer_ptr>
      850:	00002637          	lui	a2,0x2
      854:	000106b7          	lui	a3,0x10
      858:	0005d703          	lhu	a4,0(a1)
@@ -592,7 +592,7 @@ Disassembly of section .text:
      880:	04e68a63          	beq	a3,a4,8d4 <__heap_size+0xd4>
      884:	00008067          	ret
      888:	000027b7          	lui	a5,0x2
-     88c:	d147a703          	lw	a4,-748(a5) # 1d14 <button_press.0>
+     88c:	d187a703          	lw	a4,-744(a5) # 1d18 <button_press.0>
      890:	00000693          	li	a3,0
      894:	02071263          	bnez	a4,8b8 <__heap_size+0xb8>
      898:	00002737          	lui	a4,0x2
@@ -600,12 +600,12 @@ Disassembly of section .text:
      8a0:	00100713          	li	a4,1
      8a4:	0ee68863          	beq	a3,a4,994 <__heap_size+0x194>
      8a8:	000026b7          	lui	a3,0x2
-     8ac:	cf06a683          	lw	a3,-784(a3) # 1cf0 <proceed>
+     8ac:	cf46a683          	lw	a3,-780(a3) # 1cf4 <proceed>
      8b0:	00e6a023          	sw	a4,0(a3)
      8b4:	00100693          	li	a3,1
      8b8:	00002737          	lui	a4,0x2
-     8bc:	d0872703          	lw	a4,-760(a4) # 1d08 <button_ptr>
-     8c0:	d0d7aa23          	sw	a3,-748(a5)
+     8bc:	d0c72703          	lw	a4,-756(a4) # 1d0c <button_ptr>
+     8c0:	d0d7ac23          	sw	a3,-744(a5)
      8c4:	00c72783          	lw	a5,12(a4)
      8c8:	0017e793          	ori	a5,a5,1
      8cc:	00f72623          	sw	a5,12(a4)
@@ -613,18 +613,18 @@ Disassembly of section .text:
      8d4:	25800713          	li	a4,600
      8d8:	fae796e3          	bne	a5,a4,884 <__heap_size+0x84>
      8dc:	00002737          	lui	a4,0x2
-     8e0:	cf472783          	lw	a5,-780(a4) # 1cf4 <pipe_speed>
+     8e0:	cf872783          	lw	a5,-776(a4) # 1cf8 <pipe_speed>
      8e4:	d2062623          	sw	zero,-724(a2)
      8e8:	00178793          	addi	a5,a5,1
-     8ec:	cef72a23          	sw	a5,-780(a4)
+     8ec:	cef72c23          	sw	a5,-776(a4)
      8f0:	00008067          	ret
      8f4:	03200513          	li	a0,50
      8f8:	250010ef          	jal	1b48 <delay>
      8fc:	00002f37          	lui	t5,0x2
-     900:	d18f2603          	lw	a2,-744(t5) # 1d18 <toggle_high_score.1>
+     900:	cf0f2603          	lw	a2,-784(t5) # 1cf0 <toggle_high_score.1>
      904:	0a060263          	beqz	a2,9a8 <__heap_size+0x1a8>
      908:	000027b7          	lui	a5,0x2
-     90c:	cf87a783          	lw	a5,-776(a5) # 1cf8 <high_score>
+     90c:	cfc7a783          	lw	a5,-772(a5) # 1cfc <high_score>
      910:	00a00713          	li	a4,10
      914:	0007a783          	lw	a5,0(a5)
      918:	02e7e733          	rem	a4,a5,a4
@@ -638,7 +638,7 @@ Disassembly of section .text:
      938:	00002837          	lui	a6,0x2
      93c:	00a00593          	li	a1,10
      940:	01070713          	addi	a4,a4,16
-     944:	d0482683          	lw	a3,-764(a6) # 1d04 <display_ptr>
+     944:	d0882683          	lw	a3,-760(a6) # 1d08 <display_ptr>
      948:	00270733          	add	a4,a4,sp
      94c:	01d12223          	sw	t4,4(sp)
      950:	01c12423          	sw	t3,8(sp)
@@ -656,7 +656,7 @@ Disassembly of section .text:
      980:	00e787b3          	add	a5,a5,a4
      984:	0017f793          	andi	a5,a5,1
      988:	40e787b3          	sub	a5,a5,a4
-     98c:	d0ff2c23          	sw	a5,-744(t5)
+     98c:	ceff2823          	sw	a5,-784(t5)
      990:	e8dff06f          	j	81c <__heap_size+0x1c>
      994:	00400693          	li	a3,4
      998:	00002737          	lui	a4,0x2
@@ -664,10 +664,10 @@ Disassembly of section .text:
      9a0:	00100693          	li	a3,1
      9a4:	f15ff06f          	j	8b8 <__heap_size+0xb8>
      9a8:	00002737          	lui	a4,0x2
-     9ac:	d0472683          	lw	a3,-764(a4) # 1d04 <display_ptr>
+     9ac:	d0872683          	lw	a3,-760(a4) # 1d08 <display_ptr>
      9b0:	fff00793          	li	a5,-1
      9b4:	00f68023          	sb	a5,0(a3)
-     9b8:	d0472703          	lw	a4,-764(a4)
+     9b8:	d0872703          	lw	a4,-760(a4)
      9bc:	00f70823          	sb	a5,16(a4)
      9c0:	02f70023          	sb	a5,32(a4)
      9c4:	02f70823          	sb	a5,48(a4)
@@ -677,11 +677,11 @@ Disassembly of section .text:
 
 000009d4 <labinit>:
      9d4:	000027b7          	lui	a5,0x2
-     9d8:	d087a703          	lw	a4,-760(a5) # 1d08 <button_ptr>
+     9d8:	d0c7a703          	lw	a4,-756(a5) # 1d0c <button_ptr>
      9dc:	000027b7          	lui	a5,0x2
-     9e0:	d007a603          	lw	a2,-768(a5) # 1d00 <switch_ptr>
+     9e0:	d047a603          	lw	a2,-764(a5) # 1d04 <switch_ptr>
      9e4:	000027b7          	lui	a5,0x2
-     9e8:	cfc7a783          	lw	a5,-772(a5) # 1cfc <timer_ptr>
+     9e8:	d007a783          	lw	a5,-768(a5) # 1d00 <timer_ptr>
      9ec:	00100693          	li	a3,1
      9f0:	00d72423          	sw	a3,8(a4)
      9f4:	ffffc737          	lui	a4,0xffffc
@@ -704,7 +704,7 @@ Disassembly of section .text:
      a30:	000025b7          	lui	a1,0x2
      a34:	01300613          	li	a2,19
      a38:	00d786b3          	add	a3,a5,a3
-     a3c:	d105a703          	lw	a4,-752(a1) # 1d10 <VGA>
+     a3c:	d145a703          	lw	a4,-748(a1) # 1d14 <VGA>
      a40:	00f70733          	add	a4,a4,a5
      a44:	00c70023          	sb	a2,0(a4)
      a48:	00178793          	addi	a5,a5,1
@@ -738,60 +738,60 @@ Disassembly of section .text:
      ab0:	000027b7          	lui	a5,0x2
      ab4:	00c68833          	add	a6,a3,a2
      ab8:	fe000693          	li	a3,-32
-     abc:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+     abc:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
      ac0:	00170313          	addi	t1,a4,1
      ac4:	00270f13          	addi	t5,a4,2
      ac8:	00e60633          	add	a2,a2,a4
      acc:	00d60023          	sb	a3,0(a2)
-     ad0:	d107a603          	lw	a2,-752(a5)
+     ad0:	d147a603          	lw	a2,-748(a5)
      ad4:	00370e93          	addi	t4,a4,3
      ad8:	00470e13          	addi	t3,a4,4
      adc:	00660633          	add	a2,a2,t1
      ae0:	00d60023          	sb	a3,0(a2)
-     ae4:	d107a603          	lw	a2,-752(a5)
+     ae4:	d147a603          	lw	a2,-748(a5)
      ae8:	00570313          	addi	t1,a4,5
      aec:	00670413          	addi	s0,a4,6
      af0:	01e60633          	add	a2,a2,t5
      af4:	00d60023          	sb	a3,0(a2)
-     af8:	d107a603          	lw	a2,-752(a5)
+     af8:	d147a603          	lw	a2,-748(a5)
      afc:	00770393          	addi	t2,a4,7
      b00:	00870293          	addi	t0,a4,8
      b04:	01d60633          	add	a2,a2,t4
      b08:	00d60023          	sb	a3,0(a2)
-     b0c:	d107a603          	lw	a2,-752(a5)
+     b0c:	d147a603          	lw	a2,-748(a5)
      b10:	00970f93          	addi	t6,a4,9
      b14:	00a70f13          	addi	t5,a4,10
      b18:	01c60633          	add	a2,a2,t3
      b1c:	00d60023          	sb	a3,0(a2)
-     b20:	d107a603          	lw	a2,-752(a5)
+     b20:	d147a603          	lw	a2,-748(a5)
      b24:	00b70e93          	addi	t4,a4,11
      b28:	00c70e13          	addi	t3,a4,12
      b2c:	00660633          	add	a2,a2,t1
      b30:	00d60023          	sb	a3,0(a2)
-     b34:	d107a603          	lw	a2,-752(a5)
+     b34:	d147a603          	lw	a2,-748(a5)
      b38:	00d70313          	addi	t1,a4,13
      b3c:	14070713          	addi	a4,a4,320
      b40:	00860633          	add	a2,a2,s0
      b44:	00d60023          	sb	a3,0(a2)
-     b48:	d107a603          	lw	a2,-752(a5)
+     b48:	d147a603          	lw	a2,-748(a5)
      b4c:	00760633          	add	a2,a2,t2
      b50:	00d60023          	sb	a3,0(a2)
-     b54:	d107a603          	lw	a2,-752(a5)
+     b54:	d147a603          	lw	a2,-748(a5)
      b58:	00560633          	add	a2,a2,t0
      b5c:	00d60023          	sb	a3,0(a2)
-     b60:	d107a603          	lw	a2,-752(a5)
+     b60:	d147a603          	lw	a2,-748(a5)
      b64:	01f60633          	add	a2,a2,t6
      b68:	00d60023          	sb	a3,0(a2)
-     b6c:	d107a603          	lw	a2,-752(a5)
+     b6c:	d147a603          	lw	a2,-748(a5)
      b70:	01e60633          	add	a2,a2,t5
      b74:	00d60023          	sb	a3,0(a2)
-     b78:	d107a603          	lw	a2,-752(a5)
+     b78:	d147a603          	lw	a2,-748(a5)
      b7c:	01d60633          	add	a2,a2,t4
      b80:	00d60023          	sb	a3,0(a2)
-     b84:	d107a603          	lw	a2,-752(a5)
+     b84:	d147a603          	lw	a2,-748(a5)
      b88:	01c60633          	add	a2,a2,t3
      b8c:	00d60023          	sb	a3,0(a2)
-     b90:	d107a603          	lw	a2,-752(a5)
+     b90:	d147a603          	lw	a2,-748(a5)
      b94:	00660633          	add	a2,a2,t1
      b98:	00d60023          	sb	a3,0(a2)
      b9c:	f30710e3          	bne	a4,a6,abc <drawBird+0x68>
@@ -808,7 +808,7 @@ Disassembly of section .text:
      bc8:	000027b7          	lui	a5,0x2
      bcc:	00450e93          	addi	t4,a0,4
      bd0:	002e9613          	slli	a2,t4,0x2
-     bd4:	d107a303          	lw	t1,-752(a5) # 1d10 <VGA>
+     bd4:	d147a303          	lw	t1,-748(a5) # 1d14 <VGA>
      bd8:	01d60633          	add	a2,a2,t4
      bdc:	00661613          	slli	a2,a2,0x6
      be0:	01060633          	add	a2,a2,a6
@@ -819,7 +819,7 @@ Disassembly of section .text:
      bf4:	00150313          	addi	t1,a0,1
      bf8:	36c05063          	blez	a2,f58 <drawBird+0x504>
      bfc:	002e9613          	slli	a2,t4,0x2
-     c00:	d107a803          	lw	a6,-752(a5)
+     c00:	d147a803          	lw	a6,-748(a5)
      c04:	01d60633          	add	a2,a2,t4
      c08:	03c68313          	addi	t1,a3,60
      c0c:	00661613          	slli	a2,a2,0x6
@@ -831,7 +831,7 @@ Disassembly of section .text:
      c24:	36c05663          	blez	a2,f90 <drawBird+0x53c>
      c28:	00250613          	addi	a2,a0,2
      c2c:	00261813          	slli	a6,a2,0x2
-     c30:	d107af03          	lw	t5,-752(a5)
+     c30:	d147af03          	lw	t5,-748(a5)
      c34:	00c80833          	add	a6,a6,a2
      c38:	00681813          	slli	a6,a6,0x6
      c3c:	03e68f93          	addi	t6,a3,62
@@ -841,7 +841,7 @@ Disassembly of section .text:
      c4c:	d2872703          	lw	a4,-728(a4)
      c50:	36e05e63          	blez	a4,fcc <drawBird+0x578>
      c54:	00261713          	slli	a4,a2,0x2
-     c58:	d107a803          	lw	a6,-752(a5)
+     c58:	d147a803          	lw	a6,-748(a5)
      c5c:	00c70733          	add	a4,a4,a2
      c60:	00671613          	slli	a2,a4,0x6
      c64:	03f68713          	addi	a4,a3,63
@@ -868,21 +868,21 @@ Disassembly of section .text:
      cb8:	04228293          	addi	t0,t0,66
      cbc:	00570733          	add	a4,a4,t0
      cc0:	fff00613          	li	a2,-1
-     cc4:	d107a803          	lw	a6,-752(a5)
+     cc4:	d147a803          	lw	a6,-748(a5)
      cc8:	00170f93          	addi	t6,a4,1
      ccc:	00270f13          	addi	t5,a4,2
      cd0:	00e80833          	add	a6,a6,a4
      cd4:	00c80023          	sb	a2,0(a6)
-     cd8:	d107a803          	lw	a6,-752(a5)
+     cd8:	d147a803          	lw	a6,-748(a5)
      cdc:	00370313          	addi	t1,a4,3
      ce0:	00168693          	addi	a3,a3,1
      ce4:	01f80833          	add	a6,a6,t6
      ce8:	00c80023          	sb	a2,0(a6)
-     cec:	d107a803          	lw	a6,-752(a5)
+     cec:	d147a803          	lw	a6,-748(a5)
      cf0:	14070713          	addi	a4,a4,320
      cf4:	01e80833          	add	a6,a6,t5
      cf8:	00c80023          	sb	a2,0(a6)
-     cfc:	d107a803          	lw	a6,-752(a5)
+     cfc:	d147a803          	lw	a6,-748(a5)
      d00:	00680833          	add	a6,a6,t1
      d04:	00c80023          	sb	a2,0(a6)
      d08:	fa76cee3          	blt	a3,t2,cc4 <drawBird+0x270>
@@ -893,20 +893,20 @@ Disassembly of section .text:
      d1c:	00e28733          	add	a4,t0,a4
      d20:	fff00313          	li	t1,-1
      d24:	fff50293          	addi	t0,a0,-1
-     d28:	d107a603          	lw	a2,-752(a5)
+     d28:	d147a603          	lw	a2,-748(a5)
      d2c:	00170813          	addi	a6,a4,1
      d30:	00270f93          	addi	t6,a4,2
      d34:	00e60633          	add	a2,a2,a4
      d38:	00660023          	sb	t1,0(a2)
-     d3c:	d107a603          	lw	a2,-752(a5)
+     d3c:	d147a603          	lw	a2,-748(a5)
      d40:	00370f13          	addi	t5,a4,3
      d44:	01060633          	add	a2,a2,a6
      d48:	00060023          	sb	zero,0(a2)
-     d4c:	d107a603          	lw	a2,-752(a5)
+     d4c:	d147a603          	lw	a2,-748(a5)
      d50:	0ad28063          	beq	t0,a3,df0 <drawBird+0x39c>
      d54:	01f60633          	add	a2,a2,t6
      d58:	00060023          	sb	zero,0(a2)
-     d5c:	d107a603          	lw	a2,-752(a5)
+     d5c:	d147a603          	lw	a2,-748(a5)
      d60:	00168693          	addi	a3,a3,1
      d64:	14070713          	addi	a4,a4,320
      d68:	01e60633          	add	a2,a2,t5
@@ -919,7 +919,7 @@ Disassembly of section .text:
      d84:	c0070713          	addi	a4,a4,-1024 # 12c00 <__global_pointer+0x10713>
      d88:	02e586b3          	mul	a3,a1,a4
      d8c:	002e9713          	slli	a4,t4,0x2
-     d90:	d107a603          	lw	a2,-752(a5)
+     d90:	d147a603          	lw	a2,-748(a5)
      d94:	01d70733          	add	a4,a4,t4
      d98:	00671713          	slli	a4,a4,0x6
      d9c:	07c00593          	li	a1,124
@@ -931,13 +931,13 @@ Disassembly of section .text:
      db4:	02088a63          	beqz	a7,de8 <drawBird+0x394>
      db8:	00289713          	slli	a4,a7,0x2
      dbc:	01170733          	add	a4,a4,a7
-     dc0:	d107a603          	lw	a2,-752(a5)
+     dc0:	d147a603          	lw	a2,-748(a5)
      dc4:	00671713          	slli	a4,a4,0x6
      dc8:	00d70733          	add	a4,a4,a3
      dcc:	04670693          	addi	a3,a4,70
      dd0:	00d606b3          	add	a3,a2,a3
      dd4:	00b68023          	sb	a1,0(a3)
-     dd8:	d107a783          	lw	a5,-752(a5)
+     dd8:	d147a783          	lw	a5,-748(a5)
      ddc:	04770713          	addi	a4,a4,71
      de0:	00e787b3          	add	a5,a5,a4
      de4:	00b78023          	sb	a1,0(a5)
@@ -945,7 +945,7 @@ Disassembly of section .text:
      dec:	00008067          	ret
      df0:	01f60633          	add	a2,a2,t6
      df4:	00660023          	sb	t1,0(a2)
-     df8:	d107a603          	lw	a2,-752(a5)
+     df8:	d147a603          	lw	a2,-748(a5)
      dfc:	00050693          	mv	a3,a0
      e00:	14070713          	addi	a4,a4,320
      e04:	01e60633          	add	a2,a2,t5
@@ -956,14 +956,14 @@ Disassembly of section .text:
      e18:	d2872783          	lw	a5,-728(a4) # 1d28 <jump_frames>
      e1c:	30f05c63          	blez	a5,1134 <drawBird+0x6e0>
      e20:	000027b7          	lui	a5,0x2
-     e24:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+     e24:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
      e28:	3fb68813          	addi	a6,a3,1019
      e2c:	01060633          	add	a2,a2,a6
      e30:	f8000813          	li	a6,-128
      e34:	01060023          	sb	a6,0(a2)
      e38:	d2872603          	lw	a2,-728(a4)
      e3c:	32c05463          	blez	a2,1164 <drawBird+0x710>
-     e40:	d107a603          	lw	a2,-752(a5)
+     e40:	d147a603          	lw	a2,-748(a5)
      e44:	3fc68813          	addi	a6,a3,1020
      e48:	01060633          	add	a2,a2,a6
      e4c:	f8000813          	li	a6,-128
@@ -971,7 +971,7 @@ Disassembly of section .text:
      e54:	d2872803          	lw	a6,-728(a4)
      e58:	00100613          	li	a2,1
      e5c:	35005263          	blez	a6,11a0 <drawBird+0x74c>
-     e60:	d107a803          	lw	a6,-752(a5)
+     e60:	d147a803          	lw	a6,-748(a5)
      e64:	40c00633          	neg	a2,a2
      e68:	14067613          	andi	a2,a2,320
      e6c:	03e68e93          	addi	t4,a3,62
@@ -988,7 +988,7 @@ Disassembly of section .text:
      e98:	00013737          	lui	a4,0x13
      e9c:	c0070713          	addi	a4,a4,-1024 # 12c00 <__global_pointer+0x10713>
      ea0:	02e58733          	mul	a4,a1,a4
-     ea4:	d107a603          	lw	a2,-752(a5)
+     ea4:	d147a603          	lw	a2,-748(a5)
      ea8:	40d006b3          	neg	a3,a3
      eac:	1406f693          	andi	a3,a3,320
      eb0:	03f70713          	addi	a4,a4,63
@@ -1015,7 +1015,7 @@ Disassembly of section .text:
      f04:	d2872783          	lw	a5,-728(a4) # 1d28 <jump_frames>
      f08:	1cf05263          	blez	a5,10cc <drawBird+0x678>
      f0c:	000027b7          	lui	a5,0x2
-     f10:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+     f10:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
      f14:	01060633          	add	a2,a2,a6
      f18:	f8000813          	li	a6,-128
      f1c:	01060023          	sb	a6,0(a2)
@@ -1023,7 +1023,7 @@ Disassembly of section .text:
      f24:	00150313          	addi	t1,a0,1
      f28:	000027b7          	lui	a5,0x2
      f2c:	00231613          	slli	a2,t1,0x2
-     f30:	d107ae83          	lw	t4,-752(a5) # 1d10 <VGA>
+     f30:	d147ae83          	lw	t4,-748(a5) # 1d14 <VGA>
      f34:	00660633          	add	a2,a2,t1
      f38:	00661613          	slli	a2,a2,0x6
      f3c:	01060633          	add	a2,a2,a6
@@ -1037,7 +1037,7 @@ Disassembly of section .text:
      f5c:	c0060613          	addi	a2,a2,-1024 # 12c00 <__global_pointer+0x10713>
      f60:	02c58833          	mul	a6,a1,a2
      f64:	00231613          	slli	a2,t1,0x2
-     f68:	d107af03          	lw	t5,-752(a5)
+     f68:	d147af03          	lw	t5,-748(a5)
      f6c:	00660633          	add	a2,a2,t1
      f70:	00661613          	slli	a2,a2,0x6
      f74:	03c80813          	addi	a6,a6,60
@@ -1052,7 +1052,7 @@ Disassembly of section .text:
      f98:	02c58333          	mul	t1,a1,a2
      f9c:	00250613          	addi	a2,a0,2
      fa0:	00261813          	slli	a6,a2,0x2
-     fa4:	d107af03          	lw	t5,-752(a5)
+     fa4:	d147af03          	lw	t5,-748(a5)
      fa8:	00c80833          	add	a6,a6,a2
      fac:	00681813          	slli	a6,a6,0x6
      fb0:	03e30313          	addi	t1,t1,62
@@ -1066,7 +1066,7 @@ Disassembly of section .text:
      fd0:	c0070713          	addi	a4,a4,-1024 # 12c00 <__global_pointer+0x10713>
      fd4:	02e586b3          	mul	a3,a1,a4
      fd8:	00261713          	slli	a4,a2,0x2
-     fdc:	d107a803          	lw	a6,-752(a5)
+     fdc:	d147a803          	lw	a6,-748(a5)
      fe0:	00c70733          	add	a4,a4,a2
      fe4:	00671713          	slli	a4,a4,0x6
      fe8:	03f68693          	addi	a3,a3,63
@@ -1087,7 +1087,7 @@ Disassembly of section .text:
     1024:	00013637          	lui	a2,0x13
     1028:	c0060613          	addi	a2,a2,-1024 # 12c00 <__global_pointer+0x10713>
     102c:	02c58633          	mul	a2,a1,a2
-    1030:	d107ae83          	lw	t4,-752(a5) # 1d10 <VGA>
+    1030:	d147ae83          	lw	t4,-748(a5) # 1d14 <VGA>
     1034:	41000833          	neg	a6,a6
     1038:	14087813          	andi	a6,a6,320
     103c:	03e60613          	addi	a2,a2,62
@@ -1096,7 +1096,7 @@ Disassembly of section .text:
     1048:	f8000813          	li	a6,-128
     104c:	01060023          	sb	a6,0(a2)
     1050:	e31ff06f          	j	e80 <drawBird+0x42c>
-    1054:	d107a603          	lw	a2,-752(a5)
+    1054:	d147a603          	lw	a2,-748(a5)
     1058:	2bc68813          	addi	a6,a3,700
     105c:	01060633          	add	a2,a2,a6
     1060:	f8000813          	li	a6,-128
@@ -1117,7 +1117,7 @@ Disassembly of section .text:
     109c:	01010113          	addi	sp,sp,16
     10a0:	00008067          	ret
     10a4:	000027b7          	lui	a5,0x2
-    10a8:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+    10a8:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
     10ac:	2bb68813          	addi	a6,a3,699
     10b0:	01060633          	add	a2,a2,a6
     10b4:	f8000813          	li	a6,-128
@@ -1129,7 +1129,7 @@ Disassembly of section .text:
     10cc:	d2872783          	lw	a5,-728(a4)
     10d0:	faf058e3          	blez	a5,1080 <drawBird+0x62c>
     10d4:	000027b7          	lui	a5,0x2
-    10d8:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+    10d8:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
     10dc:	03c68813          	addi	a6,a3,60
     10e0:	01060633          	add	a2,a2,a6
     10e4:	f8000813          	li	a6,-128
@@ -1146,20 +1146,20 @@ Disassembly of section .text:
     1110:	d2872783          	lw	a5,-728(a4) # 1d28 <jump_frames>
     1114:	0cf05863          	blez	a5,11e4 <drawBird+0x790>
     1118:	000027b7          	lui	a5,0x2
-    111c:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+    111c:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
     1120:	17b68813          	addi	a6,a3,379
     1124:	01060633          	add	a2,a2,a6
     1128:	f8000813          	li	a6,-128
     112c:	01060023          	sb	a6,0(a2)
     1130:	f8dff06f          	j	10bc <drawBird+0x668>
     1134:	000027b7          	lui	a5,0x2
-    1138:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+    1138:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
     113c:	f8000e93          	li	t4,-128
     1140:	01060633          	add	a2,a2,a6
     1144:	01d60023          	sb	t4,0(a2)
     1148:	d2872603          	lw	a2,-728(a4)
     114c:	cec056e3          	blez	a2,e38 <drawBird+0x3e4>
-    1150:	d107a603          	lw	a2,-752(a5)
+    1150:	d147a603          	lw	a2,-748(a5)
     1154:	3fb68813          	addi	a6,a3,1019
     1158:	01060633          	add	a2,a2,a6
     115c:	01d60023          	sb	t4,0(a2)
@@ -1167,14 +1167,14 @@ Disassembly of section .text:
     1164:	00013637          	lui	a2,0x13
     1168:	c0060613          	addi	a2,a2,-1024 # 12c00 <__global_pointer+0x10713>
     116c:	02c58633          	mul	a2,a1,a2
-    1170:	d107a803          	lw	a6,-752(a5)
+    1170:	d147a803          	lw	a6,-748(a5)
     1174:	f8000e93          	li	t4,-128
     1178:	03c60613          	addi	a2,a2,60
     117c:	00c80633          	add	a2,a6,a2
     1180:	01d60023          	sb	t4,0(a2)
     1184:	d2872603          	lw	a2,-728(a4)
     1188:	ccc056e3          	blez	a2,e54 <drawBird+0x400>
-    118c:	d107a603          	lw	a2,-752(a5)
+    118c:	d147a603          	lw	a2,-748(a5)
     1190:	3fc68813          	addi	a6,a3,1020
     1194:	01060633          	add	a2,a2,a6
     1198:	01d60023          	sb	t4,0(a2)
@@ -1182,7 +1182,7 @@ Disassembly of section .text:
     11a0:	00100813          	li	a6,1
     11a4:	e81ff06f          	j	1024 <drawBird+0x5d0>
     11a8:	00000713          	li	a4,0
-    11ac:	d107a803          	lw	a6,-752(a5)
+    11ac:	d147a803          	lw	a6,-748(a5)
     11b0:	40e00633          	neg	a2,a4
     11b4:	14067613          	andi	a2,a2,320
     11b8:	03f68713          	addi	a4,a3,63
@@ -1199,7 +1199,7 @@ Disassembly of section .text:
     11e4:	d2872783          	lw	a5,-728(a4)
     11e8:	eaf050e3          	blez	a5,1088 <drawBird+0x634>
     11ec:	000027b7          	lui	a5,0x2
-    11f0:	d107a603          	lw	a2,-752(a5) # 1d10 <VGA>
+    11f0:	d147a603          	lw	a2,-748(a5) # 1d14 <VGA>
     11f4:	17c68813          	addi	a6,a3,380
     11f8:	01060633          	add	a2,a2,a6
     11fc:	f8000813          	li	a6,-128
@@ -1263,7 +1263,7 @@ Disassembly of section .text:
     12dc:	000f0d93          	mv	s11,t5
     12e0:	00028793          	mv	a5,t0
     12e4:	000d8613          	mv	a2,s11
-    12e8:	d1052683          	lw	a3,-752(a0) # 1d10 <VGA>
+    12e8:	d1452683          	lw	a3,-748(a0) # 1d14 <VGA>
     12ec:	00b78db3          	add	s11,a5,a1
     12f0:	00178793          	addi	a5,a5,1
     12f4:	01b686b3          	add	a3,a3,s11
@@ -1278,7 +1278,7 @@ Disassembly of section .text:
     1318:	01568023          	sb	s5,0(a3)
     131c:	00178793          	addi	a5,a5,1
     1320:	02c7d063          	bge	a5,a2,1340 <drawPipes+0x138>
-    1324:	d1052683          	lw	a3,-752(a0)
+    1324:	d1452683          	lw	a3,-748(a0)
     1328:	00b78db3          	add	s11,a5,a1
     132c:	01b686b3          	add	a3,a3,s11
     1330:	ffc7c0e3          	blt	a5,t3,1310 <drawPipes+0x108>
@@ -1302,7 +1302,7 @@ Disassembly of section .text:
     1378:	01df5463          	bge	t5,t4,1380 <drawPipes+0x178>
     137c:	000f0493          	mv	s1,t5
     1380:	00028793          	mv	a5,t0
-    1384:	d1082683          	lw	a3,-752(a6)
+    1384:	d1482683          	lw	a3,-748(a6)
     1388:	00b78e33          	add	t3,a5,a1
     138c:	00178793          	addi	a5,a5,1
     1390:	01c686b3          	add	a3,a3,t3
@@ -1315,7 +1315,7 @@ Disassembly of section .text:
     13ac:	01568023          	sb	s5,0(a3)
     13b0:	00178793          	addi	a5,a5,1
     13b4:	02c7d063          	bge	a5,a2,13d4 <drawPipes+0x1cc>
-    13b8:	d1082683          	lw	a3,-752(a6)
+    13b8:	d1482683          	lw	a3,-748(a6)
     13bc:	00b78e33          	add	t3,a5,a1
     13c0:	01c686b3          	add	a3,a3,t3
     13c4:	fff7c0e3          	blt	a5,t6,13a4 <drawPipes+0x19c>
@@ -1363,25 +1363,25 @@ Disassembly of section .text:
     1464:	d0e7ae23          	sw	a4,-740(a5) # 1d1c <status>
     1468:	000027b7          	lui	a5,0x2
     146c:	00300713          	li	a4,3
-    1470:	cee7aa23          	sw	a4,-780(a5) # 1cf4 <pipe_speed>
+    1470:	cee7ac23          	sw	a4,-776(a5) # 1cf8 <pipe_speed>
     1474:	000027b7          	lui	a5,0x2
     1478:	d207a623          	sw	zero,-724(a5) # 1d2c <timeoutcount>
     147c:	00002637          	lui	a2,0x2
     1480:	00d506b3          	add	a3,a0,a3
     1484:	00050793          	mv	a5,a0
     1488:	fe000593          	li	a1,-32
-    148c:	d1062703          	lw	a4,-752(a2) # 1d10 <VGA>
+    148c:	d1462703          	lw	a4,-748(a2) # 1d14 <VGA>
     1490:	00f70733          	add	a4,a4,a5
     1494:	00b70023          	sb	a1,0(a4)
     1498:	00178793          	addi	a5,a5,1
     149c:	fed798e3          	bne	a5,a3,148c <game_over+0x3c>
-    14a0:	d1062783          	lw	a5,-752(a2)
+    14a0:	d1462783          	lw	a5,-748(a2)
     14a4:	00002737          	lui	a4,0x2
-    14a8:	d0c72683          	lw	a3,-756(a4) # 1d0c <VGA_CTRL>
+    14a8:	d1072683          	lw	a3,-752(a4) # 1d10 <VGA_CTRL>
     14ac:	00a787b3          	add	a5,a5,a0
     14b0:	00002737          	lui	a4,0x2
     14b4:	00f6a223          	sw	a5,4(a3)
-    14b8:	cf072703          	lw	a4,-784(a4) # 1cf0 <proceed>
+    14b8:	cf472703          	lw	a4,-780(a4) # 1cf4 <proceed>
     14bc:	0006a023          	sw	zero,0(a3)
     14c0:	00072783          	lw	a5,0(a4)
     14c4:	fe078ee3          	beqz	a5,14c0 <game_over+0x70>
@@ -1442,7 +1442,7 @@ Disassembly of section .text:
     1598:	00002437          	lui	s0,0x2
     159c:	01400613          	li	a2,20
     15a0:	c0068693          	addi	a3,a3,-1024 # 12c00 <__global_pointer+0x10713>
-    15a4:	d1042703          	lw	a4,-752(s0) # 1d10 <VGA>
+    15a4:	d1442703          	lw	a4,-748(s0) # 1d14 <VGA>
     15a8:	00f70733          	add	a4,a4,a5
     15ac:	00c70023          	sb	a2,0(a4)
     15b0:	00178793          	addi	a5,a5,1
@@ -1452,17 +1452,17 @@ Disassembly of section .text:
     15c0:	60078793          	addi	a5,a5,1536 # 22600 <__global_pointer+0x20113>
     15c4:	01400613          	li	a2,20
     15c8:	80068693          	addi	a3,a3,-2048 # 25800 <__global_pointer+0x23313>
-    15cc:	d1042703          	lw	a4,-752(s0)
+    15cc:	d1442703          	lw	a4,-748(s0)
     15d0:	00f70733          	add	a4,a4,a5
     15d4:	00c70023          	sb	a2,0(a4)
     15d8:	00178793          	addi	a5,a5,1
     15dc:	fed798e3          	bne	a5,a3,15cc <game+0xfc>
     15e0:	00002d37          	lui	s10,0x2
-    15e4:	d04d2783          	lw	a5,-764(s10) # 1d04 <display_ptr>
+    15e4:	d08d2783          	lw	a5,-760(s10) # 1d08 <display_ptr>
     15e8:	fff00713          	li	a4,-1
     15ec:	fffff9b7          	lui	s3,0xfffff
     15f0:	00e78023          	sb	a4,0(a5)
-    15f4:	d04d2783          	lw	a5,-764(s10)
+    15f4:	d08d2783          	lw	a5,-760(s10)
     15f8:	06098993          	addi	s3,s3,96 # fffff060 <_stack_end+0xffefd24c>
     15fc:	00013a37          	lui	s4,0x13
     1600:	00e78823          	sb	a4,16(a5)
@@ -1488,7 +1488,7 @@ Disassembly of section .text:
     1650:	00f12623          	sw	a5,12(sp)
     1654:	db888b93          	addi	s7,a7,-584 # 1db8 <timeoutcount+0x8c>
     1658:	00002937          	lui	s2,0x2
-    165c:	d0cc2783          	lw	a5,-756(s8) # 1d0c <VGA_CTRL>
+    165c:	d10c2783          	lw	a5,-752(s8) # 1d10 <VGA_CTRL>
     1660:	00c7a783          	lw	a5,12(a5)
     1664:	0017f793          	andi	a5,a5,1
     1668:	1a079463          	bnez	a5,1810 <game+0x340>
@@ -1498,7 +1498,7 @@ Disassembly of section .text:
     1678:	01300513          	li	a0,19
     167c:	00b985b3          	add	a1,s3,a1
     1680:	00098793          	mv	a5,s3
-    1684:	d1042703          	lw	a4,-752(s0)
+    1684:	d1442703          	lw	a4,-748(s0)
     1688:	00f70733          	add	a4,a4,a5
     168c:	00a70023          	sb	a0,0(a4)
     1690:	00178793          	addi	a5,a5,1
@@ -1511,8 +1511,8 @@ Disassembly of section .text:
     16ac:	000a8613          	mv	a2,s5
     16b0:	00048593          	mv	a1,s1
     16b4:	b55ff0ef          	jal	1208 <drawPipes>
-    16b8:	d1042783          	lw	a5,-752(s0)
-    16bc:	d0cc2703          	lw	a4,-756(s8)
+    16b8:	d1442783          	lw	a5,-748(s0)
+    16bc:	d10c2703          	lw	a4,-752(s8)
     16c0:	00500513          	li	a0,5
     16c4:	013787b3          	add	a5,a5,s3
     16c8:	00f72223          	sw	a5,4(a4)
@@ -1530,7 +1530,7 @@ Disassembly of section .text:
     16f8:	02f4e4b3          	rem	s1,s1,a5
     16fc:	082a8a93          	addi	s5,s5,130
     1700:	000027b7          	lui	a5,0x2
-    1704:	cf47a783          	lw	a5,-780(a5) # 1cf4 <pipe_speed>
+    1704:	cf87a783          	lw	a5,-776(a5) # 1cf8 <pipe_speed>
     1708:	03800713          	li	a4,56
     170c:	40fa8ab3          	sub	s5,s5,a5
     1710:	01575a63          	bge	a4,s5,1724 <game+0x254>
@@ -1556,7 +1556,7 @@ Disassembly of section .text:
     1760:	00a00513          	li	a0,10
     1764:	00d12423          	sw	a3,8(sp)
     1768:	00812603          	lw	a2,8(sp)
-    176c:	d04d2683          	lw	a3,-764(s10)
+    176c:	d08d2683          	lw	a3,-760(s10)
     1770:	00f607b3          	add	a5,a2,a5
     1774:	05f62a23          	sw	t6,84(a2)
     1778:	05e62c23          	sw	t5,88(a2)
@@ -1592,7 +1592,7 @@ Disassembly of section .text:
     17f0:	02f05463          	blez	a5,1818 <game+0x348>
     17f4:	fff78793          	addi	a5,a5,-1
     17f8:	d2f92423          	sw	a5,-728(s2)
-    17fc:	d0cc2783          	lw	a5,-756(s8)
+    17fc:	d10c2783          	lw	a5,-752(s8)
     1800:	ff9b0b13          	addi	s6,s6,-7
     1804:	00c7a783          	lw	a5,12(a5)
     1808:	0017f793          	andi	a5,a5,1
@@ -1606,7 +1606,7 @@ Disassembly of section .text:
     1828:	003b0b13          	addi	s6,s6,3
     182c:	e31ff06f          	j	165c <game+0x18c>
     1830:	000027b7          	lui	a5,0x2
-    1834:	cf87a783          	lw	a5,-776(a5) # 1cf8 <high_score>
+    1834:	cfc7a783          	lw	a5,-772(a5) # 1cfc <high_score>
     1838:	0007a703          	lw	a4,0(a5)
     183c:	01b75463          	bge	a4,s11,1844 <game+0x374>
     1840:	01b7a023          	sw	s11,0(a5)
@@ -1618,23 +1618,23 @@ Disassembly of section .text:
     1858:	d0f72e23          	sw	a5,-740(a4) # 1d1c <status>
     185c:	00300793          	li	a5,3
     1860:	00002737          	lui	a4,0x2
-    1864:	cef72a23          	sw	a5,-780(a4) # 1cf4 <pipe_speed>
+    1864:	cef72c23          	sw	a5,-776(a4) # 1cf8 <pipe_speed>
     1868:	000027b7          	lui	a5,0x2
     186c:	d207a623          	sw	zero,-724(a5) # 1d2c <timeoutcount>
     1870:	fe000613          	li	a2,-32
     1874:	00dc86b3          	add	a3,s9,a3
     1878:	000c8793          	mv	a5,s9
-    187c:	d1042703          	lw	a4,-752(s0)
+    187c:	d1442703          	lw	a4,-748(s0)
     1880:	00f70733          	add	a4,a4,a5
     1884:	00c70023          	sb	a2,0(a4)
     1888:	00178793          	addi	a5,a5,1
     188c:	fed798e3          	bne	a5,a3,187c <game+0x3ac>
-    1890:	d1042783          	lw	a5,-752(s0)
-    1894:	d0cc2683          	lw	a3,-756(s8)
+    1890:	d1442783          	lw	a5,-748(s0)
+    1894:	d10c2683          	lw	a3,-752(s8)
     1898:	00002737          	lui	a4,0x2
     189c:	019787b3          	add	a5,a5,s9
     18a0:	00f6a223          	sw	a5,4(a3)
-    18a4:	cf072703          	lw	a4,-784(a4) # 1cf0 <proceed>
+    18a4:	cf472703          	lw	a4,-780(a4) # 1cf4 <proceed>
     18a8:	0006a023          	sw	zero,0(a3)
     18ac:	00072783          	lw	a5,0(a4)
     18b0:	fe078ee3          	beqz	a5,18ac <game+0x3dc>
@@ -1681,23 +1681,23 @@ Disassembly of section .text:
     194c:	c0090913          	addi	s2,s2,-1024 # 12c00 <__global_pointer+0x10713>
     1950:	04600413          	li	s0,70
     1954:	abda0a13          	addi	s4,s4,-1347 # 6abd <__global_pointer+0x45d0>
-    1958:	d04aa703          	lw	a4,-764(s5) # 1d04 <display_ptr>
+    1958:	d08aa703          	lw	a4,-760(s5) # 1d08 <display_ptr>
     195c:	d00c2e23          	sw	zero,-740(s8) # 1d1c <status>
     1960:	00000793          	li	a5,0
     1964:	00970023          	sb	s1,0(a4)
-    1968:	d04aa703          	lw	a4,-764(s5)
+    1968:	d08aa703          	lw	a4,-760(s5)
     196c:	01300693          	li	a3,19
     1970:	00970823          	sb	s1,16(a4)
     1974:	02970023          	sb	s1,32(a4)
     1978:	02970823          	sb	s1,48(a4)
     197c:	04970023          	sb	s1,64(a4)
     1980:	04970823          	sb	s1,80(a4)
-    1984:	d109a703          	lw	a4,-752(s3) # 1d10 <VGA>
+    1984:	d149a703          	lw	a4,-748(s3) # 1d14 <VGA>
     1988:	00f70733          	add	a4,a4,a5
     198c:	00d70023          	sb	a3,0(a4)
     1990:	00178793          	addi	a5,a5,1
     1994:	ff2798e3          	bne	a5,s2,1984 <main_menu+0x84>
-    1998:	d109a503          	lw	a0,-752(s3)
+    1998:	d149a503          	lw	a0,-748(s3)
     199c:	00000713          	li	a4,0
     19a0:	08c00613          	li	a2,140
     19a4:	00000793          	li	a5,0
@@ -1708,9 +1708,9 @@ Disassembly of section .text:
     19b8:	00270713          	addi	a4,a4,2
     19bc:	14050513          	addi	a0,a0,320
     19c0:	fec712e3          	bne	a4,a2,19a4 <main_menu+0xa4>
-    19c4:	d0cba703          	lw	a4,-756(s7) # 1d0c <VGA_CTRL>
-    19c8:	d109a683          	lw	a3,-752(s3)
-    19cc:	cf0b2783          	lw	a5,-784(s6) # 1cf0 <proceed>
+    19c4:	d10ba703          	lw	a4,-752(s7) # 1d10 <VGA_CTRL>
+    19c8:	d149a683          	lw	a3,-748(s3)
+    19cc:	cf4b2783          	lw	a5,-780(s6) # 1cf4 <proceed>
     19d0:	00d72223          	sw	a3,4(a4)
     19d4:	00072023          	sw	zero,0(a4)
     19d8:	0007a703          	lw	a4,0(a5)
@@ -1991,40 +1991,44 @@ Disassembly of section .data:
     1cec:	0000                	.insn	2, 0x
 	...
 
-00001cf0 <proceed>:
-    1cf0:	1d20                	.insn	2, 0x1d20
+00001cf0 <toggle_high_score.1>:
+    1cf0:	0001                	.insn	2, 0x0001
 	...
 
-00001cf4 <pipe_speed>:
-    1cf4:	00000003          	lb	zero,0(zero) # 0 <_isr_handler>
-
-00001cf8 <high_score>:
-    1cf8:	1d24                	.insn	2, 0x1d24
+00001cf4 <proceed>:
+    1cf4:	1d20                	.insn	2, 0x1d20
 	...
 
-00001cfc <timer_ptr>:
-    1cfc:	0020                	.insn	2, 0x0020
-    1cfe:	0400                	.insn	2, 0x0400
+00001cf8 <pipe_speed>:
+    1cf8:	00000003          	lb	zero,0(zero) # 0 <_isr_handler>
 
-00001d00 <switch_ptr>:
-    1d00:	0010                	.insn	2, 0x0010
+00001cfc <high_score>:
+    1cfc:	1d24                	.insn	2, 0x1d24
+	...
+
+00001d00 <timer_ptr>:
+    1d00:	0020                	.insn	2, 0x0020
     1d02:	0400                	.insn	2, 0x0400
 
-00001d04 <display_ptr>:
-    1d04:	0050                	.insn	2, 0x0050
+00001d04 <switch_ptr>:
+    1d04:	0010                	.insn	2, 0x0010
     1d06:	0400                	.insn	2, 0x0400
 
-00001d08 <button_ptr>:
-    1d08:	00d0                	.insn	2, 0x00d0
+00001d08 <display_ptr>:
+    1d08:	0050                	.insn	2, 0x0050
     1d0a:	0400                	.insn	2, 0x0400
 
-00001d0c <VGA_CTRL>:
-    1d0c:	0100                	.insn	2, 0x0100
+00001d0c <button_ptr>:
+    1d0c:	00d0                	.insn	2, 0x00d0
     1d0e:	0400                	.insn	2, 0x0400
 
-00001d10 <VGA>:
-    1d10:	0000                	.insn	2, 0x
-    1d12:	0800                	.insn	2, 0x0800
+00001d10 <VGA_CTRL>:
+    1d10:	0100                	.insn	2, 0x0100
+    1d12:	0400                	.insn	2, 0x0400
+
+00001d14 <VGA>:
+    1d14:	0000                	.insn	2, 0x
+    1d16:	0800                	.insn	2, 0x0800
 
 Disassembly of section .rodata.str1.4:
 

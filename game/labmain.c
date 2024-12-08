@@ -89,6 +89,7 @@ void setup_pipes(int (*pipes)[PIPES_TO_GENERATE]) {
 	}
 }
 
+/* Sets ground to green in VGA Screen buffer. */
 void setup_bg_ground() {
 	for (int VGA_offset=0; VGA_offset<2;VGA_offset++) {
 		// Ground
@@ -98,7 +99,10 @@ void setup_bg_ground() {
 	}
 }
 
-/* Added function for setting display display_number to value. (DOT IS ADDED AND MAY NEED TO BE REMOVED) */
+/* 
+Setting display display_number to value. 
+(From Lab 3 in IS1500 but written by these authors and modified for this game.) 
+*/
 void set_displays(int display_number, int value, int dot) {
 	// the section will light up if the bit is 0
 	char numbers_on_display[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90, 0xFF};
@@ -111,12 +115,18 @@ void set_displays(int display_number, int value, int dot) {
 	*ptr = displaybits;
 }
 
+/* 
+Setting all 7-segment displays as no number.
+*/
 void setup_7seg_displays() {
 	for (int i=0; i<6;i++) {
 		set_displays(i,10,0);
 	}
 }
 
+/*
+Set all 7-segment displays only to score. 
+*/
 void set_score(int score) {
 	int x = score % 10;
 	int display = 0;
@@ -128,8 +138,11 @@ void set_score(int score) {
 	}
 }
 
+/*
+Toggle showing the current high score on the 7-segment displays.
+*/
 void toggle_high_score_display() {
-	static int toggle_high_score = 0;
+	static int toggle_high_score = 1;
 	if (toggle_high_score) {
 		set_score(*high_score);
 	} else {
@@ -138,10 +151,15 @@ void toggle_high_score_display() {
 	toggle_high_score = (toggle_high_score+1)%2;
 }
 
+/*
+
+*/
 void handle_interrupt(int mcause) {
-	// button press
 	static int button_press = 0;
+	// button 1 press is cause 18
 	if (mcause == 18) {
+		// if first time edge is detected (button is pressed) 
+		// else button is released
 		if (button_press == 0) {
 			if (status == GAME) {
 				jump_frames = JUMP_TIME;
@@ -155,9 +173,9 @@ void handle_interrupt(int mcause) {
 
 		// button_ptr + 3 is the edge capture register 
 		// (setting the bit for the button clears the edge capture)
-		*(button_ptr+3) |= 0b1; 
-		
+		*(button_ptr+3) |= 0b1; 	
 	} 
+	// switch interrupt
 	if (mcause == 17) {
 		if (status == MAIN_MENU) {
 			delay(50);
@@ -165,6 +183,7 @@ void handle_interrupt(int mcause) {
 		}
 		*(switch_ptr+3) |= 0b1;
 	}
+	// timer interrupt
 	if (mcause == 16) {
 		*timer_ptr &= ~(0b1);   // reset timeout bit
 		++timeoutcount;
