@@ -11,8 +11,6 @@ If nothing else is suggested all code was written by both authors cooperating.
 
 /* Below functions can be found in other files. */
 extern void enable_interrupt(void);
-extern void display_string(char*);
-extern char* time2string(int time);
 extern void delay(int);
 
 // Global pointers
