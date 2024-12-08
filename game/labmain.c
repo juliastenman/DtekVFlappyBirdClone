@@ -31,6 +31,7 @@ const char PIPE_COLOR = 0b00001000;
 const char PIPE_LIGHT_COLOR = 0b00101100;
 const char PIPE_HIGHLIGHT = 0b00110101;
 const char BEAK_COLOR = 0b1111100;
+const char WING_COLOR = 0b10000000;
 
 // Bird position
 const int BIRD_RADIUS = 7;
@@ -152,7 +153,8 @@ void toggle_high_score_display() {
 }
 
 /*
-
+Handling the interrupt based on mcause. 
+(Based on code from Lab 3 in IS1500, but completely modified to fit the purpose of this game.)
 */
 void handle_interrupt(int mcause) {
 	static int button_press = 0;
@@ -177,8 +179,8 @@ void handle_interrupt(int mcause) {
 	} 
 	// switch interrupt
 	if (mcause == 17) {
+		delay(50);
 		if (status == MAIN_MENU) {
-			delay(50);
 			toggle_high_score_display();
 		}
 		*(switch_ptr+3) |= 0b1;
@@ -187,6 +189,7 @@ void handle_interrupt(int mcause) {
 	if (mcause == 16) {
 		*timer_ptr &= ~(0b1);   // reset timeout bit
 		++timeoutcount;
+		// increase speed after each minute if in game
 		if (status==GAME && timeoutcount==600) {
 			++pipe_speed;
 			timeoutcount=0;
@@ -195,6 +198,10 @@ void handle_interrupt(int mcause) {
 	}
 }
 
+/*
+Initialize interrupts before game starts.
+(Base code from Lab 3 in IS1500, but modified to fit this purpose.)
+*/
 void labinit(void) {
 	// button_ptr + 2 is the interrupt mask 
 	// setting bit 1 allows button to interrupt
@@ -206,6 +213,10 @@ void labinit(void) {
 	enable_interrupt();
 }
 
+/*
+Draws background in VGA Screen Buffer on first half or second half
+depending on VGA_offset. Only draws sky, since ground is constant.
+*/
 void drawBackground(int VGA_offset) {
 	// Sky
 	for (int i=0; i<WIDTH*SKY_HEIGHT;i++) {
@@ -214,6 +225,11 @@ void drawBackground(int VGA_offset) {
 }
 
 // Bird, uses (BIRD_POS_X, bird_pos_y) as center
+/*
+Draws bird in VGA Screen Buffer on first half or second half
+depending on VGA_offset. Checks that bird is in frame.
+
+*/
 void drawBird(int bird_pos_y, int VGA_offset) {
 	// highest position and lowest allowed y value on screen is 0 
 	int y0=bird_pos_y-BIRD_RADIUS > 0 ? bird_pos_y-BIRD_RADIUS : 0;
@@ -232,11 +248,11 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 			if (bird_pos_y+y>=0) {
 				if (jump_frames > 0) {
 					if (1.5*y == -x+6 || 1.5*y -1 == -x+6) {
-						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = 0b10000000;
+						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = WING_COLOR;
 				 	}
 				} else {
 					if (3*y-3 == x || 3*y-2==x) {
-						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = 0b10000000;
+						*(VGA + VGA_offset*SIZE + (bird_pos_y+y)*WIDTH + (BIRD_POS_X0+2+x)) = WING_COLOR;
 				 	}
 				}
 
@@ -255,6 +271,7 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 			}
 		}
 	}
+
 	// draw beak
 	int y02 = y1 > 3 ? y1-3 : 0;
 	int y03 = y1 > 4 ? y1-4 : 0; 
