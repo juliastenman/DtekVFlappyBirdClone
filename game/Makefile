@@ -1,3 +1,5 @@
+# From Lab 3 in the course IS1500.
+
 SRC_DIR ?= ./
 OBJ_DIR ?= ./
 SOURCES ?= $(shell find $(SRC_DIR) -name '*.c' -or -name '*.S')

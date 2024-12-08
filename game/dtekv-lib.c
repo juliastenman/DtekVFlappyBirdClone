@@ -1,3 +1,7 @@
+/*
+Code taken from Lab 3 in the course IS1500.
+*/
+
 #include "dtekv-lib.h"
 
 #define JTAG_UART ((volatile unsigned int*) 0x04000040)

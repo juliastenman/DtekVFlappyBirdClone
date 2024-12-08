@@ -1,3 +1,8 @@
+/*
+Most code is from Lab 3 in IS1500. 
+Modifications by Alexander Pereira Engström and Julia Stenman.
+*/
+
 .data
 .align 2
 welcome_msg: .asciz "================================================\n===== RISC-V Boot-Up Process Now Complete ======\n================================================\n"
