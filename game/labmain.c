@@ -1,3 +1,12 @@
+/*
+Date: 2024-12-08
+Authors: Alexander Pereira Engström and Julia Stenman
+
+All code in this file is written by the authors.
+The code may be based on other code which is explicitly stated in the comments.
+If nothing else is suggested all code was written by both authors cooperating.
+*/
+
 #define PIPES_TO_GENERATE 1000
 
 /* Below functions can be found in other files. */
@@ -83,7 +92,9 @@ enum GAME_STATUS {
 };
 enum GAME_STATUS status = MAIN_MENU;
 
-/* Generates PIPES_TO_GENERATE number of randomized pipes.*/
+/* Generates PIPES_TO_GENERATE number of randomized pipes,
+pipes will store randomized vertical heights (y-center).
+*/
 void setup_pipes(int (*pipes)[PIPES_TO_GENERATE]) {
 	for (int i=0; i<PIPES_TO_GENERATE;i++) {
 		(*pipes)[i] = ((11111+7*(i+timeoutcount))/((i+1)%23)) % (SKY_HEIGHT - 2*PIPE_MIN_HEIGHT) + PIPE_MIN_HEIGHT;
@@ -228,7 +239,6 @@ void drawBackground(int VGA_offset) {
 /*
 Draws bird in VGA Screen Buffer on first half or second half
 depending on VGA_offset. Checks that bird is in frame.
-
 */
 void drawBird(int bird_pos_y, int VGA_offset) {
 	// highest position and lowest allowed y value on screen is 0 
@@ -260,8 +270,9 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 		}
 	}
 
-	// draw eye
+	// don't go off the screen 
 	int y01 = y1-11 > 0 ? y1-11 : 0;
+	// draw eye (0 is black and 0xFF is white, no extra variables necessary)
 	for (int y=y01;y<y1-4;y++) {
 		for (int x=BIRD_POS_X1-5; x<BIRD_POS_X1-1;x++) {
 			if (x >= BIRD_POS_X1-4 && y >= y1-9 && !(x==BIRD_POS_X1-3 && y==y1-8)) {
@@ -272,7 +283,7 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 		}
 	}
 
-	// draw beak
+	// draw beak 
 	int y02 = y1 > 3 ? y1-3 : 0;
 	int y03 = y1 > 4 ? y1-4 : 0; 
 	if (y02>0) {
@@ -284,18 +295,24 @@ void drawBird(int bird_pos_y, int VGA_offset) {
 	}
 }
 
-
+/*
+Draws pipes in VGA Screen Buffer on first half or second half
+depending on VGA_offset. Bases x position on first pipe.
+*/
 void drawPipes(int pipes[], int pipe_idx, int first_pipe_center_x, int VGA_offset) {
+	// current pipe drawn and its center
 	int idx = pipe_idx;
 	int x_center = first_pipe_center_x;
 	
+	// while current pipe is on screen
 	while (x_center - PIPE_RADIUS < WIDTH) {
+		// current pipe left and right x 
 		int x0 = x_center-PIPE_RADIUS > 0 ? x_center-PIPE_RADIUS : 0;
 		int x1 = x_center+PIPE_RADIUS < WIDTH ? x_center+PIPE_RADIUS : WIDTH;
 		
 		int y_center = pipes[idx];
 
-		// high part of pipe
+		// draw high part of pipe
 		for (int y=0; y<y_center-PIPE_HALF_GAP; y++) {
 			for (int x=x0; x<x1; x++) {
 				if (x > x0 + 5 && x < x1-4) {
@@ -311,7 +328,7 @@ void drawPipes(int pipes[], int pipe_idx, int first_pipe_center_x, int VGA_offse
 			}
 		}
 
-		// low part of pipe
+		// draw low part of pipe
 		for (int y=y_center+PIPE_HALF_GAP; y<SKY_HEIGHT; y++) {
 			for (int x=x0; x<x1; x++) {
 				if (x > x0 + 5 && x < x1-4) {
@@ -326,11 +343,16 @@ void drawPipes(int pipes[], int pipe_idx, int first_pipe_center_x, int VGA_offse
 			}
 		}
 
+		// get next pipe index and its x center
 		++idx;
 		x_center += PIPE_HORIZONTAL_SPACE;
 	}
 }
 
+/*
+Game over function that displays red on screen and 
+waits until user continues to next screen.
+*/
 void game_over(int VGA_offset) {
 	status = GAME_OVER;
 	pipe_speed = PIPE_SPEED_START;
@@ -348,80 +370,81 @@ void game_over(int VGA_offset) {
 	*proceed = 0;
 }
 
-
+/*
+Game function for each time the player presses play until they die.
+*/
 void game() {
 	status = GAME;
 	// offset for writing to first or second half of VGA buffer
 	int VGA_offset = 1;
+	
+	// initialize values 
 	int bird_pos_y = BIRD_START_POS_Y;
 	int pipe_idx = 0;
 	int first_pipe_center_x = WIDTH + PIPE_RADIUS;
 	int score = 0;
-	
+
+	// Setup the game:	
 	// stores all pipes
 	int pipes[PIPES_TO_GENERATE];
 	setup_pipes(&pipes);
-
 	setup_bg_ground();
 	setup_7seg_displays();
 	set_displays(0,0,0);
+
 	while (1) {
-		// stall while swapping
+		// stall while swapping frame being displayed so the current frame shown won't be drawn on
 		while (*(VGA_CTRL+3)&0b1) {
 			asm volatile("nop");
 		}
 
+		// Draw 
 		drawBackground(VGA_offset);
 		drawBird(bird_pos_y, VGA_offset);
 		drawPipes(pipes,pipe_idx, first_pipe_center_x, VGA_offset);	
 
-
-		// sends vga address as output
+		// Sends vga address as output
 		*(VGA_CTRL+1) = (unsigned int) VGA+VGA_offset*SIZE;
 		
-		// swaps buffer and backbuffer
+		// Swaps buffer and backbuffer
 		*(VGA_CTRL+0) = 0;
 
-		
-		// // Small delay
-		// for (int i = 0; i < 100000; i++) {
-		// 	asm volatile("nop");
-		// }
+		// Small delay
 		delay(5);
 		
-		// swap side of vga buffer		
+		// Swap side of vga buffer		
 		VGA_offset = (VGA_offset+1)%2;
 
-		// if leftmost visible pipe out of screen, make next pipe the first pipe
+		// If leftmost visible pipe out of screen, make next pipe the first pipe
 		if (first_pipe_center_x + PIPE_RADIUS < 0) {
 			pipe_idx = (pipe_idx + 1)%1000;
 			first_pipe_center_x += PIPE_HORIZONTAL_SPACE;
 		}
 
-		// move first pipe by speed
+		// Move first pipe by speed
 		first_pipe_center_x -= pipe_speed;
 
+		// If first pipe is passed, increment score
 		if (first_pipe_center_x >= BIRD_POS_X - BIRD_RADIUS && first_pipe_center_x < BIRD_POS_X - BIRD_RADIUS + pipe_speed) {
 			++score;
 		}
-
 		set_score(score);
 
-		// positive y means downwards
+		// positive y means downwards so if hit ground break while loop
 		if (bird_pos_y + BIRD_RADIUS >= SKY_HEIGHT){
 			break;
 		}
 
-		// if bird could collide with pipe on x-axis
+		// if bird could collide with pipe on x-axis 
 		if (BIRD_POS_X+BIRD_RADIUS>=first_pipe_center_x-PIPE_RADIUS && BIRD_POS_X-BIRD_RADIUS<=first_pipe_center_x+PIPE_RADIUS) {
+			// if bird will collide with y on firt pipe too, break while loop
 			if (bird_pos_y+BIRD_RADIUS>=pipes[pipe_idx]+PIPE_HALF_GAP || bird_pos_y-BIRD_RADIUS<=pipes[pipe_idx]-PIPE_HALF_GAP) {
 				break;
 			} 
 		}
 
-// 		bird's movement
+ 		// bird's movement
 		if (jump_frames > 0) {
-			// display_string("jump frames is > 0\n");
 			bird_pos_y -= JUMP_SPEED;
 			jump_frames--;
 		} else if (jump_frames == 0) {
@@ -430,22 +453,29 @@ void game() {
 			bird_pos_y += FALL_SPEED;
 		}
 	}
+
+	// Possibly set high score
 	if (score > *high_score) {
 		*high_score = score;
 	}
 	game_over(VGA_offset);
 }
 
+/*
+Main menu function showing blue main screen with play icon.
+*/
 void main_menu() {
 	while (1) {
 		status = MAIN_MENU;
 		setup_7seg_displays();
+
 		for (int i=0; i<SIZE;i++) {
 			*(VGA+i) = BGR_COLOR;
 		}
 
 		volatile char* play_address = VGA+WIDTH*(HEIGHT/2-PLAY_WIDTH/2) - PLAY_WIDTH/2 +WIDTH/2;
 
+		// Draw play symbol
 		for (int y=0; y < 70; y++) {
 			for (int x=0; x<70; x++) {
 				if (2*y>x && 2*y < -x +140) {
@@ -455,19 +485,23 @@ void main_menu() {
 			}
 		}		
 
-		// sends vga address as output
+		// Sends vga screen buffer address as backbuffer
 		*(VGA_CTRL+1) = (unsigned int) VGA;
+
+		// Swap buffer with backbuffer
 		*(VGA_CTRL+0) = 0;
 		
-		while (!(*proceed)) {
-			//
-		}
+		// Stall and poll proceed
+		while (!(*proceed)) {}
+
+		// Reset proceed
 		*proceed = 0;
+
+		// Proceed to game
 		game();
 	}
 }
 
-// for VGA 
 int main(){
 	labinit();
 	main_menu();
