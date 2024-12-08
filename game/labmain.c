@@ -1,5 +1,4 @@
 #define PIPES_TO_GENERATE 1000
-// check that code above works
 
 /* Below functions can be found in other files. */
 extern void enable_interrupt(void);
@@ -7,13 +6,13 @@ extern void display_string(char*);
 extern char* time2string(int time);
 extern void delay(int);
 
+// Global pointers
 volatile char *VGA = (volatile char*) 0x08000000;
 volatile int *VGA_CTRL = (volatile int*) 0x04000100;
 volatile int *button_ptr = (volatile int*) 0x040000d0;
 volatile unsigned char *display_ptr = (unsigned char*) 0x04000050;      // 1 byte per display
 volatile unsigned int *switch_ptr = (unsigned int*) 0x04000010;     // 10 bits (2 bytes sufficient)
 volatile unsigned short *timer_ptr = (unsigned short*) 0x04000020;      // 2 bytes per register
-
 
 // screen size
 const int WIDTH = 320;
@@ -33,54 +32,58 @@ const char PIPE_LIGHT_COLOR = 0b00101100;
 const char PIPE_HIGHLIGHT = 0b00110101;
 const char BEAK_COLOR = 0b1111100;
 
-// bird pos.
+// Bird position
 const int BIRD_RADIUS = 7;
 const int BIRD_POS_X = WIDTH/5;
 const int BIRD_POS_X0 = BIRD_POS_X-BIRD_RADIUS;
 const int BIRD_POS_X1 = BIRD_POS_X+BIRD_RADIUS;
 const int BIRD_START_POS_Y = HEIGHT/2;
 
-// pipes
+// Pipes 
 const int PIPE_RADIUS=15;
 const int PIPE_HORIZONTAL_SPACE = 130;
 const int PIPE_HALF_GAP = 30;
 const int PIPE_MIN_HEIGHT = 50;
 
-// speeds
-const int PIPE_SPEED = 3;
+// Game speeds
+const int PIPE_SPEED_START = 3;
 const int FALL_SPEED = 3;	// pixels down per frame
 const int JUMP_SPEED = 7; 	// pixels up per frame
 const int JUMP_TIME = 4; 	// frames for each jump
 
 // ------------------------
-// modified with interrupts:
+// Global variables modified with interrupts:
 
-// is modified after each tenth of a second
+// timoutcount is incremented after each tenth of a second
 int timeoutcount = 0;
 
-// is modified when jump
+// jump_frames is modified when jumping
 int jump_frames = 0;
 
-int HIGH_SCORE_START = 0;
-volatile int* high_score = &HIGH_SCORE_START;
+// high_score is set to score when score is higher
+int high_score_start = 0;
+volatile int* high_score = &high_score_start;
 
-int pipe_speed = PIPE_SPEED;
+// pipe_speed is incremented after each minute and reset at game over
+int pipe_speed = PIPE_SPEED_START;
+
+// true if proceed to next screen/status
+int proceed_val = 0;
+volatile int* proceed = &proceed_val;
 // --------------------------
 
+/*
+For knowing what the game status is now.
+*/
 enum GAME_STATUS {
 	MAIN_MENU,
 	GAME,
 	GAME_OVER
 };
-
 enum GAME_STATUS status = MAIN_MENU;
 
-// true if proceed to next screen
-int proceed_val = 0;
-volatile int* proceed = &proceed_val;
-
-
-void setup_pipes(int (*pipes)[1000]) {
+/* Generates PIPES_TO_GENERATE number of randomized pipes.*/
+void setup_pipes(int (*pipes)[PIPES_TO_GENERATE]) {
 	for (int i=0; i<PIPES_TO_GENERATE;i++) {
 		(*pipes)[i] = ((11111+7*(i+timeoutcount))/((i+1)%23)) % (SKY_HEIGHT - 2*PIPE_MIN_HEIGHT) + PIPE_MIN_HEIGHT;
 	}
@@ -165,7 +168,7 @@ void handle_interrupt(int mcause) {
 	if (mcause == 16) {
 		*timer_ptr &= ~(0b1);   // reset timeout bit
 		++timeoutcount;
-		if (timeoutcount==600) {
+		if (status==GAME && timeoutcount==600) {
 			++pipe_speed;
 			timeoutcount=0;
 		}
@@ -294,7 +297,7 @@ void drawPipes(int pipes[], int pipe_idx, int first_pipe_center_x, int VGA_offse
 
 void game_over(int VGA_offset) {
 	status = GAME_OVER;
-	pipe_speed = PIPE_SPEED;
+	pipe_speed = PIPE_SPEED_START;
 	timeoutcount=0;
 	for (int i=0; i<SIZE;i++) {
 		*(VGA+VGA_offset*SIZE+i) = BIRD_COLOR;
