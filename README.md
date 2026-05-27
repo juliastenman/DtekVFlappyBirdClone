@@ -1,7 +1,8 @@
-# 🐤 Flappy Clone (DTEK-V Edition)
+# 🐦 Flappy Bird Clone (DTEK-V Edition)
 
-A simple Flappy Bird–style game written mostly in **C**, designed for the **DTEK-V**. 
+A simple Flappy Bird–style game written mostly in **C**, designed for the **DTEK-V**.
 
+> This documentation was partially generated using AI and reviewed by the developers.
 ---
 
 ## 📁 Project Structure
@@ -36,7 +37,7 @@ This will generate a `main.bin` binary ready for execution on the board.
 
 ---
 
-## 🚀 Running the Game
+## ▶️ Running the Game
 
 This guide assumes the DTEK-V board is already connected and configured (USBIPD, JTAG, etc.).
 
