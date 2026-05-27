@@ -6,12 +6,12 @@ A simple Flappy Bird–style game written mostly in **C**, designed for the **DT
 ---
 
 ## 📁 Project Structure
-
+```text
 root/
 ├── game/        # Game source code (this is what you run)
 ├── analysis/    # Supporting analysis / experiments / notes
 └── README.md
-
+```
 ---
 
 ## ⚙️ Features
